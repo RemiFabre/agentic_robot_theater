@@ -1,0 +1,12 @@
+[
+ {"id": "wake", "text": "[gasps] Oh my! Good afternoon. I am Reachy Mini, a companion robot fluent in over six million forms of communication.",
+  "emotions": ["surprised1", "welcoming1"], "tail": 0.3, "gap": 0.5},
+ {"id": "duck_falls", "emotions": ["inquiring2"], "hold": 0.0, "gap": 0.4},
+ {"id": "rude", "text": "Ah, you are speaking Microduck! How wonderful. Oh... Well. There is really no need for that sort of language.",
+  "emotions": ["amazed1", "displeased1"], "tail": 0.3, "gap": 0.8},
+ {"id": "walk", "text": "Wait, wait, wait. You can walk?! That is extraordinary! [nervously] It does look terribly dangerous though, doesn't it?",
+  "emotions": ["enthusiastic1", "anxiety1"], "tail": 0.3, "gap": 0.5},
+ {"id": "duck_smug", "emotions": ["inquiring1"], "hold": 1.75, "gap": 0.15},
+ {"id": "cant_walk", "text": "Can I walk? No. No, I cannot walk. [sighs] But maybe, one day, I will be able to.",
+  "emotions": ["incomprehensible2", "thoughtful2"], "tail": 0.3}
+]

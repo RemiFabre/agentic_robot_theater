@@ -1,0 +1,6 @@
+[project]
+name = "agentic-robot-theater"
+version = "0.1.0"
+description = "Agent-driven skits on Reachy Mini: ElevenLabs voice, emotions + wobble on the robot, captions and music."
+requires-python = ">=3.11"
+dependencies = ["elevenlabs>=2", "numpy", "scipy", "soundfile", "pillow"]
