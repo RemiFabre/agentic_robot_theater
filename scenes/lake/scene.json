@@ -1,0 +1,14 @@
+[
+ {"id": "hey", "text": "[warmly] Hey, Microduck!",
+  "emotions": ["come1"], "tail": 0.3, "gap": 0.4},
+ {"id": "talk", "text": "[sighs] Look, I have to talk to you.",
+  "emotions": ["understanding1"], "tail": 0.3, "gap": 0.3},
+ {"id": "duck_curious", "emotions": ["attentive1"], "hold": 3.5, "gap": 0.3},
+ {"id": "bad_news", "text": "[sighs] I know you were very excited to go to the lake. [sympathetic] But we won't be able to go today. [sadly] I'm sorry.",
+  "emotions": ["resigned1", "no_sad1"], "tail": 0.3, "gap": 0.4},
+ {"id": "but_why", "emotions": ["inquiring2"], "hold": 2.0, "gap": 0.3},
+ {"id": "excuse", "text": "[nervously] Because... [pause] well... [nervous laugh] it's raining outside.",
+  "emotions": ["uncertain1"], "tail": 0.3, "gap": 0.3},
+ {"id": "window", "emotions": ["uncomfortable1"], "hold": 4.0, "gap": 0.3},
+ {"id": "the_end", "emotions": ["sad2"], "hold": 8.0}
+]
