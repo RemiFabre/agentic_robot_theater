@@ -62,6 +62,13 @@ uv run video/gen_music.py --out ~/Videos/<name>/music "warm piano, hopeful, unde
 video/mix_music.sh ~/Videos/<name>/skit_captioned.mp4 ~/Videos/<name>/music/x.mp3 out.mp4 [end_s]
 ```
 
+## The other actor: Microduck
+
+Everything for the duck side is in [`microduck/`](microduck/README.md): the gamepad mapping of the
+film build (LB curious, RB peck, R3 startled, Select soft release, D-pad right servo reboot), how
+to ship that build to the robot and revert it, the branch and PR names, the voice seeds, and the
+MuJoCo simulation used to prototype a scene before filming.
+
 ## Lessons learned (read these)
 
 - **Robot boots limp** (motor control disabled). `enable_motors()` first, `wake_up()` to start,
