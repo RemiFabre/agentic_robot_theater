@@ -82,9 +82,19 @@ way to play an arbitrary wav (check `robotd/src/sound.rs`; `aplay` on the robot 
 
 ## Working style Rémi asked for
 
-- Autonomous, but **show results early and often**: pop a video or an audio candidate on his
-  screen (`open file`) as soon as something is decent, so a wrong angle is caught early. He has
-  lost days to agents polishing a dead end.
+- Autonomous, but **show results early and often**, so a wrong angle is caught early. He has
+  lost days to agents polishing a dead end. Concretely:
+  - **Sounds**: generate candidates into one folder (say `notes/emotions/sounds/<emotion>/`,
+    named `A_port_sad2_v1.wav`, `B_notes_minor_v2.wav`, and so on) and `open` that folder on his
+    screen as soon as the first ones exist; keep adding to it. With each batch, a few lines of
+    state: what each file is, what changed, what is next.
+  - **Motions**: a page with videos made in simulation (one clip per candidate, named), opened on
+    his screen; `notes/reachy-encounter/encounter.py` shows how to render and mix, and the
+    comic/madison scripts have contact sheets and index pages to copy.
+  - **Motion + sound together**: once both exist for an emotion, one video with both, in
+    simulation first, then on the robot.
+- Aim for a coherent duration of sound and motion (the quack and the move should feel like one
+  gesture); it is a target, not a strict constraint.
 - Keep a running notes document he can read (what was tried, what failed, why). Absolute paths
   everywhere. Plain English, define terms, no walls of text.
 - Videos of every RL run on the environment it was trained on; report joint speeds and falls.
