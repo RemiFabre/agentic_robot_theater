@@ -9,7 +9,7 @@ Pipeline (each step is one command):
 ```
 scene.json ──► voice/render_lines.py ──► audio/<line>.wav
                        │
-robot/run_on_robot.sh ─┴─► plays on the robot (ENTER start / ESC abort)   ← human films
+robot/run_on_robot.sh ─┴─► plays on the robot (wakes up, ENTER start / ESC abort)   ← human films
                                         │
 video/captions.py  (cut + burned captions, timing from audio alignment + STT word times)
 video/gen_music.py + video/mix_music.sh  (ElevenLabs music bed, ducked under the voice)
@@ -51,7 +51,7 @@ uv run voice/design_voice.py --save <generated_voice_id> --name "My Robot"
 # 2. render all lines of a scene
 uv run voice/render_lines.py scenes/<name> --voice <voice_id>
 
-# 3. play on the robot (syncs files, then ENTER to start, ESC to abort -> robot sleeps)
+# 3. play on the robot (syncs files, wakes the robot, then ENTER = start delay + beat 0; ESC aborts -> robot sleeps)
 robot/run_on_robot.sh scenes/<name> [--start-delay 5] [--from-beat 2]
 
 # 4. after filming: cut + captions (speaker tag only for the robot's lines)

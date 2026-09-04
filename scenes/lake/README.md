@@ -12,13 +12,14 @@ from `pollen-robotics/reachy-mini-emotions-library` chained under the lines.
 robot/run_on_robot.sh scenes/lake --start-delay 5
 ```
 
-Setup takes a few seconds (loads the moves, motors on), then it prints `ENTER to start`.
-Press ENTER, start filming, and 5 s later the robot wakes up and beat 0 begins
-(change `--start-delay` to taste; `--from-beat K` restarts from a beat; ESC aborts and sleeps).
+Setup takes a few seconds (loads the moves, motors on, **the robot wakes up**), then it prints
+`ENTER to start`. Frame the awake robot, press ENTER, and 5 s later beat 0 (the first line) begins
+(change `--start-delay` to taste; `--from-beat K` restarts from a beat; ESC aborts and sleeps,
+both while waiting for ENTER and during the scene).
 
 Re-render a line (spends credits): `uv run voice/render_lines.py scenes/lake --voice 0m5sA4wKd4nKxBtRAu0n --only excuse`
 
-## Beats (times from the wake-up, computed from the WAVs and the recorded move lengths)
+## Beats (times from beat 0, computed from the WAVs and the recorded move lengths)
 
 | t | beat | length | Reachy | camera (Rémi, phone vertical) / Rémi's voice |
 |---|---|---|---|---|
@@ -34,8 +35,8 @@ Re-render a line (spends credits): `uv run voice/render_lines.py scenes/lake --v
 | 61.4 | `the_end` | 8.0 s | silent, `sad2`: the head sinks slowly over ~2 s, is fully down (antennas drooping) from ~2.5 s to ~5 s, then comes back up; hold 8 s | on Reachy, end |
 | 69.4 | end | | lingers 10 s, then goes to sleep (ESC = sleep now) | |
 
-**Total: 69.4 s from the wake-up** (plus the 5 s start delay and the wake-up move itself);
-about 80 s including the 10 s linger before it sleeps.
+**Total: 69.4 s from beat 0** (plus the 5 s start delay after ENTER; measured on the robot
+2026-09-04: 70.0 s); about 80 s including the 10 s linger before it sleeps.
 
 Notes:
 - Every recorded move returns to the neutral pose at its end, `sad2` included. For the final

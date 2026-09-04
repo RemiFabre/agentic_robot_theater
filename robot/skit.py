@@ -1,8 +1,9 @@
 """Scene player. Runs ON the robot over `ssh -t` (see run_on_robot.sh).
 
 Usage: skit.py <scene_dir> [--start-delay S] [--from-beat K] [--no-wake] [--no-sleep]
-Setup first (load emotions, connect, motors on), then ENTER starts, ESC/q/Ctrl+C aborts
-(motion + audio stop, robot goes back to sleep). Spoken beats need <scene_dir>/audio/<id>.wav.
+Setup first (load emotions, connect, motors on, wake-up move), then ENTER waits --start-delay
+and starts beat 0; ESC/q/Ctrl+C aborts at any point (motion + audio stop, robot goes back to
+sleep). Spoken beats need <scene_dir>/audio/<id>.wav.
 """
 import argparse, json, os, select, sys, termios, threading, time, tty
 
@@ -76,15 +77,19 @@ def main():
     threading.Thread(target=key_listener, daemon=True).start()
     with ReachyMini() as mini:
         mini.enable_motors()
-        say(f"setup done in {time.time()-t0:.1f}s. >>> ENTER to start, ESC to abort <<<")
+        if not a.no_wake:
+            say("wake up"); mini.wake_up()
+        say(f"setup done in {time.time()-t0:.1f}s, robot awake. "
+            f">>> ENTER to start (beat 0 after {a.start_delay:g}s), ESC to abort <<<")
         while not start_ev.is_set():
             if stop_ev.is_set():
-                say("aborted"); mini.disable_motors(); return 0
+                say("aborted")
+                if not a.no_sleep: mini.goto_sleep()
+                mini.disable_motors(); return 0
             time.sleep(0.05)
         em = EmotionRunner(mini, moves)
         try:
-            if not a.no_wake:
-                isleep(a.start_delay); say("wake up"); mini.wake_up()
+            isleep(a.start_delay)
             mini.enable_wobbling()
             for i, b in enumerate(beats):
                 if i < a.from_beat: continue
