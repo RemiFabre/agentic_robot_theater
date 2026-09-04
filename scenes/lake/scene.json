@@ -6,9 +6,12 @@
  {"id": "duck_curious", "emotions": ["attentive1"], "hold": 3.5, "gap": 0.3},
  {"id": "bad_news", "text": "[sighs] I know you were very excited to go to the lake. [sympathetic] But we won't be able to go today. [sadly] I'm sorry.",
   "emotions": ["resigned1", "no_sad1"], "tail": 0.3, "gap": 0.4},
- {"id": "but_why", "emotions": ["inquiring2"], "hold": 2.0, "gap": 0.3},
- {"id": "excuse", "text": "[nervously] Because... [pause] well... [nervous laugh] it's raining outside.",
-  "emotions": ["uncertain1"], "tail": 0.3, "gap": 0.3},
+ {"id": "but_why", "emotions": ["uncertain1"], "hold": 6.0, "gap": 0.3},
+ {"id": "excuse", "text": "[nervously] Because, well... [pause] the meteorological conditions... [nervous laugh] are not optimal right now.",
+  "emotions": ["shy1"], "tail": 0.3, "gap": 0.3},
  {"id": "window", "emotions": ["uncomfortable1"], "hold": 4.0, "gap": 0.3},
+ {"id": "are_you_scared", "emotions": ["surprised1"], "hold": 2.5, "gap": 0.2},
+ {"id": "not_scared", "text": "[quickly] No. [dismissive] I'm not scared. [proudly] I'm just optimizing our long-term survivability.",
+  "emotions": ["no1", "proud2", "fear1"], "tail": 0.3, "gap": 0.4},
  {"id": "the_end", "emotions": ["sad2"], "hold": 8.0}
 ]
