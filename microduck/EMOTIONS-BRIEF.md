@@ -12,8 +12,10 @@ between Reachy Mini and Microduck with a lot of visible emotion. The framing ide
 trying to teach Microduck how to show emotions, or the two simply interact and emotions fly.
 
 Reachy Mini already has this: the public dataset of recorded moves
-`pollen-robotics/reachy-mini-emotions-library` on Hugging Face (each move has a motion and a
-sound; most of the sounds were made with a flute, Reachy Mini's original sound identity). The job
+`pollen-robotics/reachy-mini-emotions-library` on Hugging Face
+(https://huggingface.co/datasets/pollen-robotics/reachy-mini-emotions-library; each move has a
+motion and a sound; most of the sounds were made with a flute, Reachy Mini's original sound
+identity). The job
 is to port a few of the best ones to Microduck, in Microduck's own identity: **quacks**.
 
 **A lesson from Reachy Mini that must guide everything: sound is paramount.** An excellent motion
@@ -24,12 +26,12 @@ motion plus a quack sound, designed together.
 
 1. **Sadness.** Motion done programmatically (no training): start the sit policy so the duck sits
    down, then slowly lower the head and shake it slowly, while a sad quack plays: a descending,
-   low-voice quack. Reference on Reachy Mini: the move called **`sad2`** (Rémi is fairly sure; use
-   its sound as the reference to copy).
+   low-voice quack. Reference sound on Reachy Mini: **`sad2`** (confirmed by Rémi).
 2. **Anger.** Motion trained with reinforcement learning: the duck stomps its little foot once,
    or better twice: stomp, head goes to the left at the same time; stomp again on the same foot,
-   head goes to the right. Plus an angry quack. Reference on Reachy Mini: name not confirmed yet
-   (look at the dataset for the angry/furious move and ask Rémi to confirm).
+   head goes to the right. Plus an angry quack. Reference sounds on Reachy Mini (confirmed by
+   Rémi; pick the one that ports best, or offer candidates from each): **`irritated2`**,
+   **`frustrated1`**, **`reprimand3`**.
 
 Later, if these two work: excited (moving left to right, happy quacks) and scared (looking up,
 shaking the head, maybe lowering the body a little; probably programmatic, RL if needed).
@@ -94,8 +96,9 @@ way to play an arbitrary wav (check `robotd/src/sound.rs`; `aplay` on the robot 
 
 ## First steps
 
-1. Fetch `pollen-robotics/reachy-mini-emotions-library`, list the moves, play `sad2` and the
-   candidates for anger; confirm the anger name with Rémi. Extract the sounds as wav.
+1. Fetch `pollen-robotics/reachy-mini-emotions-library`, play `sad2`, `irritated2`,
+   `frustrated1`, `reprimand3`. Extract the sounds as wav. Trim their silences freely (Rémi
+   said so); the contour and energy are what matter, not the exact length.
 2. Sound, in parallel: strategy A (port) and strategy B (programmatic) for sadness and anger,
    three to five named candidates each; put them in one folder or page and open it for Rémi.
 3. Sadness motion, programmatic, in simulation first (`notes/reachy-encounter/duckfilm.py` has
