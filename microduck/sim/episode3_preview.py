@@ -36,6 +36,17 @@ class SceneDuck(L.Duck3):
     def __init__(self, *a, **k):
         super().__init__(*a, **k)
         self.gp_phase = None
+        self.hold_home = False        # after `robot.init`: torque on, holding the home pose, no policy (until the second Start)
+
+    def control_tick(self, t):
+        if self.hold_home and self.ramp is None and not self.relax:
+            self.t = t
+            self.net, self.kp = "hold", F.KP_STAND
+            self.bam.model.actuator.kp = self.kp
+            self.bam.q_target[:] = F.HOME
+            self.jaw_open += 0.5 * (F.JAW_MAX * float(self.mouth) - self.jaw_open)
+            return
+        super().control_tick(t)
 
     def _policy_tick(self):
         if self.skill == "ground_pick":
@@ -92,19 +103,34 @@ def curious_pick():
     return L.Motion("curious", "curious (Y)", 3.0, fn, quacks=[0.6, 1.2]), EMO / "sounds/robot/curious_a.wav"
 
 
-PICK_NAMES = {"closed_quack": "closed_quack", "play_dead": "playdead"}
+PICK_NAMES = {"play_dead": "playdead"}
+
+
+def pick_open():
+    """The ground pick with the beak opening on the way down (Kind::Pick): mouth 1 from 0.1 s, shut at 0.75 s."""
+    return L.Motion("pick", "ground pick, beak open on the way down", 3.0,
+                    lambda t: dict(skill="ground_pick" if t < 2.9 else None, mouth=L.pulse(t, 0.1, 0.25, 0.4, 0.25))), None
 
 
 def emotion(name):
     if name == "curious":
         return curious_pick()
+    if name == "pick":
+        return pick_open()
+    if name == "mmh":
+        mod_path = EMO / "motion/mmh/render_mmh.py"
+        spec = importlib.util.spec_from_file_location("emo_mmh", mod_path); mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod); m, wav, _ = mod.pick(); return m, Path(wav)
+    if name == "yes_fast":
+        m, _ = emotion("yes")
+        return L.Motion("yes_fast", m.desc, m.total, m.fn, m.beats), EMO / "sounds/yes/yes_single__Y3_synth_wak.wav"
     p = load_pick(PICK_NAMES.get(name, name))
     if p is None:
         print(f"!! {name}: no pick yet, the duck holds still")
         return L.Motion(name, "(not designed yet)", 2.0, lambda t: {}), None
     m, wav = p
-    if name == "closed_quack":
-        m = L.Motion(m.name, m.desc, m.total, lambda t, f=m.fn: dict(f(t) or {}, mouth=0.0), m.beats)
+    if name == "excited":
+        wav = EMO / "sounds/excited/excited_wag_pump__X1_synth_rise_climb.wav"     # Rémi's sound pick
     return m, wav
 
 
@@ -164,24 +190,36 @@ def main():
         t0 = t
         need = 0.0
         label = b["id"]
-        if "duck" in b:
-            mo, wav = emotion(b["duck"])
-            events.append((t0, "express", mo))
-            if wav:
-                audio.append((t0, wav))
-            need = mo.total
-        elif "duck_skill" in b:
-            events.append((t0, "skill", b["duck_skill"]))
-            need = {"ground_pick": 4.0, "sit_toggle": 2.5, "roulade": 1.5}.get(b["duck_skill"], 0.6)
-        elif "duck_sound" in b:
-            audio.append((t0, L.BANK / b["duck_sound"] / f"{b['duck_sound']}_a.wav"))
-            need = 0.5
-        elif "duck_move" in b:
-            events.append((t0, "move", (b["duck_move"], float(b.get("for", 1.0)))))
-            need = float(b.get("for", 1.0))
+        cues = [dict(b, at=0.0)] + list(b.get("duck_cues", []))
+        for c in cues:
+            tc = t0 + float(c.get("at", 0.0))
+            if "duck" in c:
+                mo, wav = emotion(c["duck"])
+                events.append((tc, "express", mo))
+                if wav:
+                    audio.append((tc, wav))
+                need = max(need, tc - t0 + mo.total)
+            elif "duck_skill" in c:
+                events.append((tc, "skill", c["duck_skill"]))
+                need = max(need, tc - t0 + {"ground_pick": 4.0, "sit_toggle": 2.5, "roulade": 1.5}.get(c["duck_skill"], 0.6))
+            elif "duck_sound" in c:
+                n, every = int(c.get("repeat", 1)), float(c.get("every", 0.45))
+                for i in range(n):
+                    audio.append((tc + i * every, L.BANK / c["duck_sound"] / f"{c['duck_sound']}_{'ae'[i % 2]}.wav"))
+                    events.append((tc + i * every, "quack", None))
+                need = max(need, tc - t0 + 0.5 + every * (n - 1))
+            elif "duck_move" in c:
+                events.append((tc, "move", (c["duck_move"], float(c.get("for", 1.0)))))
+                need = max(need, tc - t0 + float(c.get("for", 1.0)))
+            elif c.get("duck_init"):
+                events.append((tc, "init", None))
+                need = max(need, tc - t0 + 2.5)
+            elif "duck_policy" in c:
+                events.append((tc, "policy", bool(c["duck_policy"])))
+                need = max(need, tc - t0 + 0.5)
         if b.get("wait") == "key":
-            events.append((t0, "standup", None))
-            need = max(need, 7.0)           # the preview stands the duck up itself: ramp 1 s, rise 2.5 s, turn
+            events.append((t0, "face", None))
+            need = max(need, 4.0)           # Rémi's pause: the preview turns the duck to face Reachy
         say = 0.0
         if b.get("text"):
             wav = scene / "audio" / f"{b['id']}.wav"
@@ -210,6 +248,7 @@ def main():
     express, express_t0 = None, 0.0
     skill_until, move_until, move = 0.0, 0.0, (0, 0, 0)
     standup = None
+    quack_until = 0.0
     caption, caption_until = "", 0.0
     beat_label = ""
     ev = sorted(events, key=lambda e: e[0])
@@ -227,9 +266,17 @@ def main():
                 beat_label = f"duck: {arg}"
             elif what == "move":
                 move, move_until = tuple(arg[0]), tt + arg[1]
-            elif what == "standup":
+            elif what == "init":
                 standup = ("ramp", tt)
-                beat_label = "Rémi: Start, turn the duck"
+                beat_label = "duck: Start (init)"
+            elif what == "policy":
+                standup = ("rise", tt) if arg else None
+                beat_label = "duck: Start (policy on)"
+            elif what == "quack":
+                quack_until = tt + 0.25
+            elif what == "face":
+                standup = ("turn", tt)
+                beat_label = "Rémi: turn the duck"
             elif what == "say":
                 caption, caption_until = strip(arg[0]), tt + arg[1] + 0.5
                 rm.talking = True
@@ -258,17 +305,22 @@ def main():
         du.soften = bool(h["soften"])
         if h["relax"]:
             du.relax = True
-        env_mouth = 0.0
+        env_mouth = 1.0 if tt < quack_until else 0.0
         du.mouth = float(h["mouth"]) if h["mouth"] is not None else env_mouth
         if standup is not None:
             phase, ts = standup
             if phase == "ramp":
                 du.relax, du.soften, du._soften_t0 = False, False, None
-                du.ramp = (tt, 1.0, du.q())
-                standup = ("rise", tt + 1.2)
+                du.ramp = (tt, 2.0, du.q())
+                du.hold_home = True
+                standup = None
             elif phase == "rise" and tt >= ts:
+                du.hold_home = False
                 du.skill = "rise"
-                standup = ("turn", tt + 2.5)
+                standup = ("stand", tt + 2.5)
+            elif phase == "stand" and tt >= ts:
+                du.skill = None
+                standup = None
             elif phase == "turn" and tt >= ts:
                 du.skill = None
                 b_ = du.bearing_to(rm.pos())

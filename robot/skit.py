@@ -15,7 +15,7 @@ ENTER before it runs (for the moments Rémi pilots the duck by hand: standing it
 """
 import argparse, json, os, select, sys, termios, threading, time, tty
 
-from duck_cue import Duck, beat_cue
+from duck_cue import Duck, beat_cue, has_cue
 
 from reachy_mini import ReachyMini
 from reachy_mini.motion.recorded_move import RecordedMoves
@@ -88,7 +88,7 @@ def main():
         for n in b.get("emotions", []): moves.get(n)
     threading.Thread(target=key_listener, daemon=True).start()
     duck = None
-    if not a.no_duck and any(k in b for b in beats for k in ("duck", "duck_skill", "duck_sound", "duck_move")):
+    if not a.no_duck and any(has_cue(b) for b in beats):
         duck = Duck(dry=a.dry_duck, log=say)
         try:
             duck.ping()
@@ -119,7 +119,7 @@ def main():
                     while not start_ev.is_set():
                         isleep(0.05)
                 bt = time.time()
-                cue = next((f"{k}={b[k]}" for k in ("duck", "duck_skill", "duck_sound", "duck_move") if k in b), "")
+                cue = " ".join(f"{k}={b[k]}" for k in ("duck", "duck_skill", "duck_sound", "duck_move", "duck_init", "duck_policy", "duck_cues") if k in b)
                 say(f"[{i}] {b['id']}: {b.get('emotions')} {'(speaks)' if b.get('text') else ''} {cue}")
                 isleep(b.get("pre", 0.0))
                 need = 0.0

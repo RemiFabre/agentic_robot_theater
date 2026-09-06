@@ -15,7 +15,7 @@ the sticks while it plays. Stdlib only, so it runs on the Reachy Mini, the Mac, 
 
 `DUCK_CUE=host:port` (default 192.168.1.29:7777). Every cue is logged with a timestamp.
 """
-import argparse, json, os, socket, sys, time
+import argparse, json, os, socket, sys, threading, time
 
 DEFAULT = "192.168.1.29:7777"
 
@@ -71,6 +71,16 @@ class Duck:
     def stop(self):
         self.cue(stop=True)
 
+    def init(self):
+        """The pad's first Start: torque on, 2 s ramp to the home pose (robot.init)."""
+        self.cue(init=True)
+        return 2.5
+
+    def policy(self, on=True):
+        """The pad's second Start: the walking / standing policy on (robot.enable)."""
+        self.cue(policy=on)
+        return 0.5
+
     def close(self):
         if self.sock:
             try:
@@ -84,23 +94,62 @@ class Duck:
 BEAT_KEYS = ("duck", "duck_skill", "duck_sound", "duck_move")
 
 
-def beat_cue(duck, beat):
-    """Send the beat's duck cue, if any. Returns the seconds the duck needs, 0.0 for none."""
-    if "duck" in beat:
-        return duck.express(beat["duck"])
-    if "duck_skill" in beat:
-        return duck.skill(beat["duck_skill"])
-    if "duck_sound" in beat:
-        return duck.sound(beat["duck_sound"])
-    if "duck_move" in beat:
-        vx, vy, wz = beat["duck_move"]
-        return duck.move(vx, vy, wz, float(beat.get("for", 1.0)))
+def one_cue(duck, c):
+    """Send one cue object (the keys a beat may carry). Returns the seconds the duck needs."""
+    if "duck" in c:
+        return duck.express(c["duck"])
+    if "duck_skill" in c:
+        return duck.skill(c["duck_skill"])
+    if "duck_sound" in c:
+        n, every = int(c.get("repeat", 1)), float(c.get("every", 0.45))
+        for i in range(n):
+            if i:
+                time.sleep(every)
+            duck.sound(c["duck_sound"])
+        return 0.5 + every * (n - 1)
+    if "duck_move" in c:
+        vx, vy, wz = c["duck_move"]
+        return duck.move(vx, vy, wz, float(c.get("for", 1.0)))
+    if c.get("duck_init"):
+        return duck.init()
+    if "duck_policy" in c:
+        return duck.policy(bool(c["duck_policy"]))
     return 0.0
+
+
+def has_cue(beat):
+    return any(k in beat for k in ("duck", "duck_skill", "duck_sound", "duck_move", "duck_init", "duck_policy", "duck_cues"))
+
+
+def beat_cue(duck, beat, sleep=time.sleep):
+    """Send the beat's duck cues: the single-cue keys at the beat's start, and/or `duck_cues`, a list
+    of {"at": seconds, ...cue} sent from a thread at their times. Returns the seconds the duck needs
+    from the beat's start (the latest cue's end)."""
+    need = one_cue(duck, beat)
+    timed = sorted(beat.get("duck_cues", []), key=lambda c: c.get("at", 0.0))
+    if not timed:
+        return need
+    ends = []
+
+    def run():
+        t0 = time.time()
+        for c in timed:
+            dt = c.get("at", 0.0) - (time.time() - t0)
+            if dt > 0:
+                sleep(dt)
+            try:
+                ends.append(c.get("at", 0.0) + one_cue(duck, c))
+            except (OSError, RuntimeError) as e:
+                duck.log(f"!!! duck cue failed: {e}")
+    threading.Thread(target=run, daemon=True).start()
+    last = timed[-1]
+    guess = last.get("at", 0.0) + {"duck_init": 2.5, "duck_policy": 0.5}.get(next((k for k in last if k.startswith("duck")), ""), 2.0)
+    return max(need, guess)
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["ping", "express", "skill", "sound", "move", "stop"])
+    ap.add_argument("cmd", choices=["ping", "express", "skill", "sound", "move", "stop", "init", "policy"])
     ap.add_argument("args", nargs="*")
     ap.add_argument("--for", dest="for_", type=float, default=1.0)
     ap.add_argument("--dry", action="store_true")
@@ -121,6 +170,10 @@ def main():
             d.move(vx, vy, wz, a.for_)
         elif a.cmd == "stop":
             d.stop()
+        elif a.cmd == "init":
+            d.init()
+        elif a.cmd == "policy":
+            d.policy(a.args[0] != "off" if a.args else True)
     finally:
         d.close()
 
