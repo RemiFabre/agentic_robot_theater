@@ -55,6 +55,8 @@ to face Reachy, then ENTER.
 | 116.7 | `what_a_relief` | 2.4 s |  / duck cues: 0.9 s duck_skill / Reachy: "[relieved] What a relief." (0.9 s) under relief1 (5.0 s), cut at 1.0 s | as soon as Reachy says it, the roulade (Rémi handles Select) |
 | 119.1 | `die_again` | 5.0 s | Reachy: "[hesitant] Did... [pause] did you die again?" (2.0 s) under uncertain1 (6.1 s), cut at 5.0 s |  |
 
+Staging: the duck stands on Reachy's RIGHT at three-quarters (both turned 45 deg toward the camera), so `body_yaw` +1.4 (a turn to the left) is "away from the duck"; if the duck is on Reachy's left, flip the sign. `look_yaw` +0.25 turns the head a little further toward the dead duck: check the side too.
+
 New in v3: `say_at` (the line starts later in the beat), `cap` (Reachy's move chain is cut there), `body_yaw` (Reachy turns its body: 1.4 rad away for the lament, 0 back on "alive"). Every hold equals its emotion's length; gaps are 0-0.2 s.
 
 ## Lines (v3; `[tags]` are ElevenLabs v3 audio tags, stripped from captions)
