@@ -76,7 +76,10 @@ def load_pick(emotion):
         return None
     finally:
         sys.argv = argv
-    return m, Path(wav)
+    wav = Path(wav)
+    if not wav.is_absolute():                   # some PICK.json paths are relative to the emotions repo
+        wav = EMO / wav
+    return m, wav
 
 
 def curious_pick():
@@ -133,6 +136,7 @@ def main():
     ap.add_argument("--out", default=None)
     ap.add_argument("--until", default=None)
     ap.add_argument("--start-delay", type=float, default=1.0)
+    ap.add_argument("--mix-only", action="store_true", help="reuse the rendered silent video, only mix the audio")
     a = ap.parse_args()
     scene = Path(a.scene_dir)
     beats = json.load(open(scene / "scene.json"))
@@ -196,6 +200,8 @@ def main():
 
     # --- run --------------------------------------------------------------------------------------------------
     import re
+    if a.mix_only and out.with_suffix(".silent.mp4").exists():
+        return mix(out, audio, rows)
     strip = lambda s: re.sub(r"\[[^\]]*\]\s*", "", s).strip()
     silent = out.with_suffix(".silent.mp4")
     writer = imageio.get_writer(str(silent), fps=FPS, codec="libx264", pixelformat="yuv420p", macro_block_size=8,
@@ -284,7 +290,11 @@ def main():
             writer.append_data(np.asarray(img))
             next_frame += 1.0 / FPS
     writer.close()
-    # audio mix
+    mix(out, audio, rows)
+
+
+def mix(out, audio, rows):
+    silent = out.with_suffix(".silent.mp4")
     cmd = ["ffmpeg", "-v", "error", "-y", "-i", str(silent)]
     parts = []
     for i, (ta, wav) in enumerate(audio):
