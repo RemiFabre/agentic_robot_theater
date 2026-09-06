@@ -22,9 +22,9 @@ Rémi's decisions). This page is the short bridge from the theater repo.
 | **R3** | laugh | beak aimed up (-0.7), head wagging, a body dip on every "ha"; 3.0 s | one longer "haaa" then seven short ha's dying out |
 | (cue) | mock | `laugh_roll`: beak up, the head rolling +-0.35, body dips; 2.6 s | the staccato run "gnagnagnagna" (after a scolding) |
 | **RB** | no | one head shake (yaw +0.55 at 0.35 s, -0.55 at 0.85 s); 1.8 s | "no-ah": two notes, the second a fourth lower (three wavs, random) |
-| **DPad-Down** | excited | six accelerating head swings +-0.6 with a body bob on each, the beak climbing to -0.7, a bow flourish; 3.4 s | six synth quacks, each higher, shorter, rising more (X1) |
+| **RT** | excited | six accelerating head swings +-0.6 with a body bob on each, the beak climbing to -0.7, a bow flourish; 3.4 s | six synth quacks, each higher, shorter, rising more (X1) |
 | (cue) | pick | the ground pick with the beak opening on the way down and shutting at the floor (the leash grasp); 3.0 s | none |
-| **DPad-Left** | play dead | sits on the press (shock), head hard to the side and back; at 1.4 s the three head servos hang free and the legs straighten (`robot.poseJoints`): it rolls flat onto its back, limp head on the side; legs up at 3.6 s; holds the dead pose until Start (the full init); 7.5 s | alarm, silence, a falling glide with a dying wobble (5.0-6.8 s, beak 0.3, the jaw stays powered) |
+| **LT** | play dead | sits on the press (shock), head hard to the side and back; at 1.4 s the three head servos hang free and the legs straighten (`robot.poseJoints`): it rolls flat onto its back, limp head on the side; legs up at 3.6 s; holds the dead pose until Start (the full init); 7.5 s | alarm, silence, a falling glide with a dying wobble (5.0-6.8 s, beak 0.3, the jaw stays powered) |
 
 Start, Select, the sticks, the triggers (mouth + chirp / wheee) and DPad-Right (servo reboot) keep working in both
 modes. Sticks are locked during an expression. Episode 3 (2026-09-06) added X / LB / RB / DPad-Down / DPad-Left, all
