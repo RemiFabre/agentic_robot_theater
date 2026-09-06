@@ -22,10 +22,9 @@ robot/run_on_robot.sh scenes/episode3 --dry-duck
 
 Before ENTER: the duck stands about 60 cm in front of Reachy, facing it, with the leash on the floor at the
 tested pick spot; a mat behind the duck for the play-dead fall. The pad stays alive: between cues Rémi can
-turn the duck with the stick. At `duck_rises` the player waits for ENTER: Start (sit-stand rise), turn the duck
-to face Reachy, then ENTER.
+turn the duck with the stick. The script rolls without a mid-scene pause (`duck_rises` no longer waits for ENTER): the duck's two Start presses are cued during the lament; if it needs a turn to face Reachy, do it with the stick while Reachy says "Yes. Like that.".
 
-## Beats (v3, tight: a beat lasts the longest of its line (from `say_at`), its duck cue, its Reachy moves (cut at `cap`) and its hold; total 124 s + the pause at `duck_rises`)
+## Beats (v3, tight: a beat lasts the longest of its line (from `say_at`), its duck cue, its Reachy moves (cut at `cap`) and its hold; total 124 s, no pause)
 
 | t | beat | length | who / what | camera, notes |
 |---|---|---|---|---|
@@ -47,7 +46,7 @@ to face Reachy, then ENTER.
 | 59.4 | `duck_play_dead` | 7.5 s | **Duck: play_dead** (7.5 s) / Reachy: surprised1 (2.5 s) | Microduck: shock quack, sits, rolls onto its back, legs up, death quack |
 | 67.1 | `are_you_ok` | 12.1 s | Reachy: "[alarmed] Microduck? [pause] Microduck, are you all right? [panicking] No. Microduck, no. [pause] Did you die? [pause] Did it overwhelm your emotional circuitry? [pause] Did I kill you with my extremely insensitive comment?" (11.9 s) under scared1 (7.2 s), fear1 (3.5 s) |  |
 | 79.4 | `lament` | 8.7 s |  / duck cues: 0.6 s duck_init, 3.6 s duck_policy, 8.2 s duck_sound / Reachy body yaw -1.4 / Reachy: "[grieving] Oh my dear friend. [pause] You were so young. [pause] You had so much to learn. [sobbing] What have I done. [pause] [wistful] I still remember your first quacks..." (8.5 s) under lost1 (8.1 s) | Reachy turns its body away (-1.4 rad, to its right) and laments; the duck's two Start presses at 0.6 and 3.6 s; a quack right on 'first quacks' (8.2 s) |
-| 88.1 | `duck_rises` | 0.3 s | **WAIT for ENTER.**  | Rémi: if the duck did not stand, Start again; turn it to face Reachy at three-quarters; then ENTER |
+| 88.1 | `duck_rises` | 0.3 s | (no pause, the script rolls) | if the duck did not stand, Start again with the pad; turn it to face Reachy with the stick |
 | 88.4 | `like_that` | 5.1 s | Reachy: "[dreamily] Yes. [pause] Like that. [pause] I still hear you, in my mind." (4.8 s) under thoughtful2 (5.5 s), cut at 5.1 s |  |
 | 93.6 | `duck_laugh` | 3.0 s | **Duck: laugh** (3.0 s) | Microduck laughs |
 | 96.7 | `alive` | 3.4 s |  / Reachy body yaw 0.0 / Reachy: "[gasps] Microduck! [overjoyed] You are alive!" (3.1 s) under amazed1 (3.4 s) | Reachy turns back |

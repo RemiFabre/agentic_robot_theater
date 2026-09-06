@@ -2,7 +2,7 @@
 # Episode 3 on the two robots, from the laptop. Checks both robots, syncs the player + the scene to the
 # Reachy Mini, then the player sets up (moves, motors on, wake-up, pings the duck) and waits for ENTER:
 # the scene starts the moment you press it (START_DELAY=5 to get 5 s to walk to the camera).
-# Mid-scene, at `duck_rises`, it waits for ENTER again (stand the duck up with Start, face it to Reachy).
+# No mid-scene pause: the script rolls to the end (about 124 s).
 # ESC / q / Ctrl+C aborts (motion + audio stop, the duck gets a stop cue, Reachy sleeps).
 #
 #   robot/run_episode3.sh                # both robots
