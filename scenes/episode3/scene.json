@@ -283,6 +283,8 @@
   ],
   "cap": 5.0,
   "tail": 0.5,
-  "hold": 4.0
+  "hold": 4.0,
+  "pre": 1.5,
+  "note": "1.5 s of silence first: time to take in what happened to Microduck"
  }
 ]
