@@ -15,6 +15,9 @@ video/captions.py  (cut + burned captions, timing from audio alignment + STT wor
 video/gen_music.py + video/mix_music.sh  (ElevenLabs music bed, ducked under the voice)
 ```
 
+Episode 2 added phone-audio clean-up, a mid-video music switch, landscape gags and a thumbnail
+recipe: see [`video/README.md`](video/README.md).
+
 ## Setup
 
 - `ELEVENLABS_API_KEY` in the shell env (a Starter plan covers everything: TTS, voice design,
@@ -87,3 +90,7 @@ MuJoCo simulation used to prototype a scene before filming.
   3-10 named candidates rather than one.
 - Iterate with the human in the loop: play candidates aloud (`afplay`), run the robot, ask which
   number they liked. Keep emotions/timing edits in the scene JSON, not code.
+- Episode 2 lessons (details in `video/README.md`): phone wind = sub-150 Hz rumble, high-pass it; level the
+  voice before mixing and keep the mix template; a music switch on the story's turn works; a vertical upload
+  is a Short and does not reach the long-form audience; gpt-image-2 repaints when outpainting, keep the
+  output that matches, re-frame, then widen with mirrored edges.

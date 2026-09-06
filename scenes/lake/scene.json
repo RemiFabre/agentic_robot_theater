@@ -3,7 +3,7 @@
   "emotions": ["come1"], "tail": 0.3, "gap": 0.4},
  {"id": "talk", "text": "[sighs] Look, I have to talk to you.",
   "emotions": ["understanding1"], "tail": 0.3, "gap": 0.3},
- {"id": "duck_curious", "emotions": ["attentive1"], "hold": 3.5, "gap": 0.3},
+ {"id": "duck_curious", "emotions": ["inquiring2"], "hold": 3.0, "gap": 0.0},
  {"id": "bad_news", "text": "[sighs] I know you were very excited to go to the lake. [sympathetic] But we won't be able to go today. [sadly] I'm sorry.",
   "emotions": ["resigned1", "no_sad1"], "tail": 0.3, "gap": 0.4},
  {"id": "but_why", "emotions": ["uncertain1"], "hold": 6.0, "gap": 0.3},
