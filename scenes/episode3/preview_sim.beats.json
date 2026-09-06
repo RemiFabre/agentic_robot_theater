@@ -17,7 +17,7 @@
   "t": 10.1,
   "id": "lake",
   "length": 9.1,
-  "text": "[sighs] The lake. [pause] The lake. [weary] You are obsessed with the lake. [pause] But you are not a dog. [firmly] You are a Microduck.",
+  "text": "[sighs] The lake. [pause] The lake. [weary] You are obsessed with the lake. [pause] But you are not a duck. [firmly] You are a Microduck.",
   "note": ""
  },
  {
@@ -106,9 +106,9 @@
  },
  {
   "t": 55.6,
-  "id": "bad_dog",
+  "id": "bad_duck",
   "length": 8.8,
-  "text": "[gasps] Oh! [pause] [hurt] How... [pause] how dare you say that, to my face. [pause] [wounded] You are... [pause] you are a bad dog.",
+  "text": "[gasps] Oh! [pause] [hurt] How... [pause] how dare you say that, to my face. [pause] [wounded] You are... [pause] you are a bad duck.",
   "note": ""
  },
  {

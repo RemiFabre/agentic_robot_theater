@@ -29,7 +29,7 @@ to face Reachy, then ENTER.
 |---|---|---|---|---|
 | 0.0 | `duck_excited` | 3.5 s | **Duck: excited** (3.4 s) | Microduck, excited about the lake |
 | 3.8 | `duck_pick` | 5.0 s | **Duck: pick** (3.0 s) / Reachy: attentive1 | Microduck picks the leash up (the beak opens on the way down, closes at the ground) |
-| 9.1 | `lake` | 9.1 s | Reachy: "[sighs] The lake. [pause] The lake. [weary] You are obsessed with the lake. [pause] But you are not a dog. [firmly] You are a Microduck." (8.8 s) under reprimand1 |  |
+| 9.1 | `lake` | 9.1 s | Reachy: "[sighs] The lake. [pause] The lake. [weary] You are obsessed with the lake. [pause] But you are not a duck. [firmly] You are a Microduck." (8.8 s) under reprimand1 |  |
 | 18.5 | `duck_mmh_1` | 2.2 s | **Duck: mmh** (2.0 s) / Reachy: inquiring1 | "What do you mean?" — the beak opens, the leash falls |
 | 20.9 | `difference` | 4.1 s | Reachy: "[patiently] The difference... [pause] the difference, is your water resistance." (3.8 s) under thoughtful1 |  |
 | 25.4 | `duck_quack_quack` | 1.4 s | **Duck: chirp** x2 / Reachy: attentive2 | quack quack (RT twice) |
@@ -42,7 +42,7 @@ to face Reachy, then ENTER.
 | 44.5 | `duck_yes_fast_2` | 1.5 s | **Duck: yes_fast** (1.5 s) |  |
 | 46.3 | `asimov` | 4.3 s | Reachy: "[exasperated] Oh, Asimov. [pause] [pleading] Give me the strength, for this one." (4.0 s) under exhausted1 |  |
 | 51.1 | `duck_angry` | 3.0 s | **Duck: angry** (2.6 s) / Reachy: surprised2 | Microduck gets angry |
-| 54.6 | `bad_dog` | 8.8 s | Reachy: "[gasps] Oh! [pause] [hurt] How... [pause] how dare you say that, to my face. [pause] [wounded] You are... [pause] you are a bad dog." (8.3 s) under displeased2, contempt1 |  |
+| 54.6 | `bad_duck` | 8.8 s | Reachy: "[gasps] Oh! [pause] [hurt] How... [pause] how dare you say that, to my face. [pause] [wounded] You are... [pause] you are a bad duck." (8.3 s) under displeased2, contempt1 |  |
 | 63.8 | `duck_play_dead` | 8.5 s | **Duck: play_dead** (7.5 s) / Reachy: surprised1 | Microduck: shock quack, sits, keels over backwards, torque back on, death quack |
 | 73.1 | `are_you_ok` | 12.3 s | Reachy: "[alarmed] Microduck? [pause] Microduck, are you all right? [panicking] No. Microduck, no. [pause] Did you die? [pause] Did I kill you with my extremely insensitive comment? [pause] Did it overwhelm your emotional circuitry?" (11.9 s) under scared1, fear1 |  |
 | 86.0 | `lament` | 8.8 s |  / duck cues: 0.6 s duck_init, 3.6 s duck_policy / Reachy: "[grieving] Oh my dear friend. [pause] You were so young. [pause] You had so much to learn. [sobbing] What have I done. [pause] [wistful] I still remember your first quacks..." (8.5 s) under lost1, downcast1 | Reachy looks away; 0.6 s later the duck's first Start (torque on, ramp home), 3 s later the second Start (policy on): the duck stands up |
@@ -59,7 +59,7 @@ to face Reachy, then ENTER.
 ## Lines (refined from Rémi's draft; `[tags]` are ElevenLabs v3 audio tags, stripped from captions)
 
 Reachy escalates about the lake, the water resistance and the sun; the duck answers with the leash in its beak,
-gets angry (the beak opens, the leash drops), then plays dead after "you are a bad dog"; Reachy laments, the
+gets angry (the beak opens, the leash drops), then plays dead after "you are a bad duck"; Reachy laments, the
 duck rises and quacks, Reachy is relieved, and the duck immediately does the roulade and probably falls forward:
 "Did... did you die again?"
 
