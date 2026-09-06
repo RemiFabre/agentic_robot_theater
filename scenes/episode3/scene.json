@@ -184,13 +184,17 @@
    {
     "at": 3.6,
     "duck_policy": true
-   },
-   {
-    "at": 8.2,
-    "duck_sound": "chirp"
    }
   ],
-  "note": "Reachy turns its body away (1.4 rad) and laments; the duck's two Start presses at 0.6 and 3.6 s; a quack right on 'first quacks' (8.2 s)"
+  "note": "Reachy turns its body away (1.4 rad) and laments; the duck's two Start presses at 0.6 and 3.6 s"
+ },
+ {
+  "id": "duck_first_quack",
+  "pre": 1.0,
+  "duck_sound": "chirp",
+  "hold": 0.5,
+  "gap": 0.2,
+  "note": "one second after the line, the duck's quack; 'Yes. Like that.' follows at once"
  },
  {
   "id": "duck_rises",
