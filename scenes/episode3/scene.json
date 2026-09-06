@@ -27,7 +27,7 @@
   "emotions": ["displeased2", "contempt1", "reprimand3"], "cap": 12.0, "tail": 0.2, "gap": 0.1},
  {"id": "duck_play_dead", "duck": "play_dead", "emotions": ["surprised1"], "cap": 7.5, "hold": 7.5, "gap": 0.2,
   "note": "Microduck: shock quack, sits, rolls onto its back, legs up, death quack"},
- {"id": "are_you_ok", "text": "[alarmed] Microduck? [pause] Microduck, are you all right? [panicking] No. Microduck, no. [pause] Did you die? [pause] Did I kill you with my extremely insensitive comment? [pause] Did it overwhelm your emotional circuitry?",
+ {"id": "are_you_ok", "text": "[alarmed] Microduck? [pause] Microduck, are you all right? [panicking] No. Microduck, no. [pause] Did you die? [pause] Did it overwhelm your emotional circuitry? [pause] Did I kill you with my extremely insensitive comment?",
   "emotions": ["scared1", "fear1"], "cap": 12.2, "tail": 0.2, "gap": 0.2},
  {"id": "lament", "text": "[grieving] Oh my dear friend. [pause] You were so young. [pause] You had so much to learn. [sobbing] What have I done. [pause] [wistful] I still remember your first quacks...",
   "body_yaw": 1.4, "emotions": ["lost1"], "cap": 8.6, "tail": 0.0, "gap": 0.0,
