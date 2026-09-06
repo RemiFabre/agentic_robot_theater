@@ -352,7 +352,7 @@ def main():
                 standup = None
             elif phase == "turn" and tt >= ts:
                 du.skill = None
-                b_ = F.wrap(du.bearing_to(rm.pos()) + math.pi / 4)      # three-quarter: Reachy 45 deg to the duck's left
+                b_ = F.wrap(du.bearing_to(rm.pos()) - math.pi / 4)      # three-quarter: Reachy 45 deg to the duck's left, the camera on the right
                 if abs(b_) > 0.15 and tt < ts + 4.0:
                     du.twist[:] = (0, 0, 1.2 * np.sign(b_))
                 else:
