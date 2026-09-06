@@ -94,3 +94,9 @@ MuJoCo simulation used to prototype a scene before filming.
   voice before mixing and keep the mix template; a music switch on the story's turn works; a vertical upload
   is a Short and does not reach the long-form audience; gpt-image-2 repaints when outpainting, keep the
   output that matches, re-frame, then widen with mirrored edges.
+
+## Microduck side
+
+`microduck/README.md` (pad, ship/unship, voice, simulation) and `microduck/EMOTIONS.md` (the duck's
+emotions on the gamepad, the recipe to make more, lessons from the real robot; the work itself is in
+https://github.com/RemiFabre/microduck_emotions).
