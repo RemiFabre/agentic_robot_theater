@@ -15,10 +15,20 @@ Rémi's decisions). This page is the short bridge from the theater repo.
 | **A** | sad | standing; beak lifts a little, then head droops to half depth with a slight bow over 2.5 s; two slow silent head shakes; hold; level again at 7.5 s | the robot's coo recipe synthesized, gliding 200 to 140 Hz with the head; silent shakes |
 | **B** | devastated | sits at once (the surprise); head droops; three slow "no" shakes starting while the head is still going down, with a sob on each; hold; head level by 8.5 s, stays seated | inquire shock at the sit, silence, three soft sobs |
 | **Y** | curious ("what? what?") | standing; head tilt right on the first chirp, left on the second; back to centre by 2.6 s | two of the bank's rising chirps, the second 2 semitones higher |
-| X | angry | not shipped (RL stomp still in training, see below) | |
+| **X** | angry | standing; beak-up glare, four snaps (yaw +0.7/-0.7/+0.7/centre, a short head jab, a small bow pulse), the beak forced wide 0.3-0.7 s so a held leash drops; 2.6 s | four hard barks on the snaps (or a growl into them: two wavs, random) |
+| **LB** | yes | one nod (head_pitch +0.7, 0.25 s down, 0.35 s up); 1.5 s | one quack falling 3 semitones at 0.45 s |
+| **RB** | no | one head shake (yaw +0.55 at 0.35 s, -0.55 at 0.85 s); 1.8 s | "no-ah": two notes, the second a fourth lower (three wavs, random) |
+| **DPad-Down** | excited | six accelerating head swings +-0.6 with a body bob on each, the beak climbing to -0.7, a bow flourish; 3.4 s | six bank chirps in rising pitch order |
+| **DPad-Left** | play dead | sits on the press (shock), head back and to the side, `robot.soften` at 2.2 s: keels over backwards, flat on its back with the head on the side by ~4.8 s; ends LIMP (Start = the way up); 7.5 s | alarm, silence, a falling glide with a dying wobble (4.8-6.6 s, beak 0.3; on the robot the jaw is gated on "driving", so probably shut) |
+| (cue only) | closed_quack | a small yaw shake, beak shut (the duck holds the leash); 2.2 s | two muffled nasal buzzes |
 
-Start and Select keep working in both modes. Sticks are locked during an expression. The wavs are
-in `/var/lib/robot/sounds/{sad,devastated,curious}/` (outside the seeded bank: `sounds
+Start, Select, the sticks, the triggers (mouth + chirp / wheee) and DPad-Right (servo reboot) keep working in both
+modes. Sticks are locked during an expression. Episode 3 (2026-09-06) added X / LB / RB / DPad-Down / DPad-Left, all
+simulation picks not yet tested on the robot, and a **cue port** (TCP 7777 on `padd`: `{"express":"yes"}`,
+`{"skill":"ground_pick"}`, `{"sound":"chirp"}`, `{"move":[vx,vy,wz],"for":1.5}`, `{"stop":true}`) so a scene
+script cues the duck as if a button were pressed; `robot/duck_cue.py` is the client, `robot/skit.py` plays duck
+cues from `scene.json` (see the main README, "Two robots in one script"). The wavs are
+in `/var/lib/robot/sounds/{sad,devastated,curious,yes,no,angry,excited,play_dead,closed}/` (outside the seeded bank: `sounds
 ensure-bank --force` deletes them; copies in `microduck_emotions/sounds/robot/`). Code:
 `padd/src/expressions.rs` (`Kind::Sad`, `Kind::Devastated`, `Kind::CuriousQuacks`), the
 `SoundTag` enum in `duck-ipc-proto`, `robotd/src/intents.rs`. The whole branch is snapshotted as
