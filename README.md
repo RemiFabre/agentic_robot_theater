@@ -65,6 +65,37 @@ uv run video/gen_music.py --out ~/Videos/<name>/music "warm piano, hopeful, unde
 video/mix_music.sh ~/Videos/<name>/skit_captioned.mp4 ~/Videos/<name>/music/x.mp3 out.mp4 [end_s]
 ```
 
+## Two robots in one script (episode 3)
+
+The same `scene.json` drives both robots. A beat may carry one duck cue next to Reachy's line
+and emotions; the two run in parallel and the beat lasts at least as long as the duck needs:
+
+```json
+{"id": "duck_angry", "duck": "angry", "emotions": ["surprised2"], "hold": 3.5}
+{"id": "duck_pick", "duck_skill": "ground_pick", "hold": 5.0}
+{"id": "duck_off", "duck_move": [0.3, 0, 0], "for": 1.5}
+{"id": "duck_rises", "wait": "key", "note": "Rémi: Start, turn the duck, then ENTER"}
+```
+
+- `duck`: an emotion of the film build (`yes`, `no`, `angry`, `excited`, `play_dead`, `sad`,
+  `devastated`, `curious`, `closed_quack`, `peck`, `startled`; see `microduck/EMOTIONS.md`).
+  `duck_skill`: `ground_pick`, `sit_toggle`, `kick_left`, `kick_right`, `roulade`. `duck_sound`:
+  a bank tag (`chirp`, `inquire`, `alarm`...). `duck_move`: a twist held for `for` seconds.
+- `wait: "key"`: the player stops and waits for ENTER before the beat, for the moments Rémi pilots
+  the duck by hand (standing it up after play dead, turning it to face Reachy).
+- Transport: `robot/duck_cue.py` sends one JSON line per cue to the duck's pad daemon (`padd`,
+  film build, TCP port 7777, `DUCK_CUE=host:port`, default `192.168.1.29:7777`) and reads the
+  answer (`{"ok": true, "duration": 8.5}`). The cue lands as if the button had been pressed, so
+  the gamepad stays alive between cues (only an expression locks the sticks while it plays), and
+  a pad must be connected (the pad loop is what applies the cues). If the duck does not answer
+  at start-up the scene runs Reachy-only (`--no-duck` forces that, `--dry-duck` prints the cues).
+- Preview in simulation before filming: `microduck/sim/episode3_preview.py scenes/episode3`
+  renders the whole scene with the sim duck (the same motions and wavs that ship) and the Reachy
+  puppet, lines mixed in.
+
+Scene `scenes/episode3` (Reachy the over-analytical friend, the duck and the lake leash) is the
+first one written this way; its README has the beat table.
+
 ## The other actor: Microduck
 
 Everything for the duck side is in [`microduck/`](microduck/README.md): the gamepad mapping of the

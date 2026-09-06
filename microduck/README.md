@@ -50,6 +50,8 @@ work (the day-by-day log is `LOG.md`).
 | DPad-Right | reboot the servos (after an overload trip), torque off, then Start |
 | DPad-Left | left kick (the right kick has no button on this build) |
 | DPad-Down | sit / stand toggle; A ground pick; X roulade; DPad-Up held 3 s walk/roller |
+| DPad-Up tap | **emotion mode** on/off (chirp in, tock out). In it: A sad, B devastated, X angry, Y curious, LB yes, RB no, DPad-Down excited, DPad-Left play dead; Start, Select, sticks, triggers, DPad-Right unchanged |
+| TCP 7777 | scripted cues from a scene player (`robot/duck_cue.py`): `{"express":"yes"}`, `{"skill":"ground_pick"}`, `{"sound":"chirp"}`, `{"move":[vx,vy,wz],"for":1.5}`, `{"stop":true}` |
 
 Adding an expression: `expressions.rs` (copied here for reference; the real one is
 `padd/src/expressions.rs` on the branch). An expression is a pure function of time: `head_at`
