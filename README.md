@@ -77,10 +77,13 @@ and emotions; the two run in parallel and the beat lasts at least as long as the
 {"id": "duck_rises", "wait": "key", "note": "Rémi: Start, turn the duck, then ENTER"}
 ```
 
-- `duck`: an emotion of the film build (`yes`, `no`, `angry`, `excited`, `play_dead`, `sad`,
-  `devastated`, `curious`, `closed_quack`, `peck`, `startled`; see `microduck/EMOTIONS.md`).
+- `duck`: an emotion of the film build (`yes`, `yes_fast`, `no`, `mmh`, `laugh`, `angry`, `excited`,
+  `play_dead`, `pick`, `sad`, `devastated`, `curious`, `peck`, `startled`; see `microduck/EMOTIONS.md`).
   `duck_skill`: `ground_pick`, `sit_toggle`, `kick_left`, `kick_right`, `roulade`. `duck_sound`:
-  a bank tag (`chirp`, `inquire`, `alarm`...). `duck_move`: a twist held for `for` seconds.
+  a bank tag (`chirp`, `inquire`, `alarm`...), with `repeat` / `every` for "quack quack".
+  `duck_move`: a twist held for `for` seconds. `duck_init` / `duck_policy`: the pad's two Start
+  presses (torque on + ramp home; policy on/off). `duck_cues`: a list of `{"at": s, ...}` cues
+  sent at their times inside the beat (e.g. the Start presses during Reachy's lament).
 - `wait: "key"`: the player stops and waits for ENTER before the beat, for the moments Rémi pilots
   the duck by hand (standing it up after play dead, turning it to face Reachy).
 - Transport: `robot/duck_cue.py` sends one JSON line per cue to the duck's pad daemon (`padd`,
