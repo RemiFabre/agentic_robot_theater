@@ -30,7 +30,8 @@ F.POLICIES["ground_pick"] = F.WS / "microduck/policies/alpha_ground_pick.onnx"
 GP_PERIOD, GP_END = 4.0, 0.7          # robotd: phase += dt / 4 s, done at 0.7
 SIZE = (1280, 720)
 FPS = 25
-DUCK_AT, REACHY_AT = (0.0, 0.0, 0.0), (0.62, 0.0, math.pi)
+# Three-quarter staging (Rémi): each actor faces the other turned 45 deg toward the camera, which sits on the -y side.
+DUCK_AT, REACHY_AT = (0.0, 0.0, -math.pi / 4), (0.62, 0.0, math.pi + math.pi / 4)
 
 
 class SceneDuck(PDDuck3):
@@ -196,7 +197,7 @@ def main():
     du.bam.last_ts = d.time
     rm = F.Reachy(m, d)
     rm.pose(tau=0.3, **F.Reachy.AWAKE)
-    rig = F.Rig(m, SIZE, lookat=[0.3, 0.0, 0.13], distance=1.15, azimuth=118, elevation=-10)
+    rig = F.Rig(m, SIZE, lookat=[0.3, 0.0, 0.13], distance=1.15, azimuth=90, elevation=-10)
     ov = F.Overlay(SIZE)
     r = mujoco.Renderer(m, SIZE[1], SIZE[0])
 
@@ -351,7 +352,7 @@ def main():
                 standup = None
             elif phase == "turn" and tt >= ts:
                 du.skill = None
-                b_ = du.bearing_to(rm.pos())
+                b_ = F.wrap(du.bearing_to(rm.pos()) + math.pi / 4)      # three-quarter: Reachy 45 deg to the duck's left
                 if abs(b_) > 0.15 and tt < ts + 4.0:
                     du.twist[:] = (0, 0, 1.2 * np.sign(b_))
                 else:
