@@ -169,7 +169,7 @@
  {
   "id": "lament",
   "text": "[grieving] Oh my dear friend. [pause] You were so young. [pause] You had so much to learn. [sobbing] What have I done. [pause] [wistful] I still remember your first quacks...",
-  "body_yaw": 1.4,
+  "body_yaw": -1.4,
   "emotions": [
    "lost1"
   ],
@@ -186,7 +186,7 @@
     "duck_policy": true
    }
   ],
-  "note": "Reachy turns its body away (1.4 rad) and laments; the duck's two Start presses at 0.6 and 3.6 s"
+  "note": "Reachy turns its body away (-1.4 rad, to its right: the duck stands on its left, Rémi's staging) and laments; the duck's two Start presses at 0.6 and 3.6 s"
  },
  {
   "id": "duck_first_quack",
