@@ -116,7 +116,7 @@
   "id": "are_you_ok",
   "length": 11.5,
   "text": "[alarmed] Microduck? [pause] Microduck, are you all right? [panicking] No. Microduck, no. [pause] Did you die? [pause] Did it overwhelm your emotional circuitry? [pause] Did I kill you with my extremely insensitive comment?",
-  "note": "Reachy first looks down where the duck died (head pitch offset 0.5 rad, kept through the moves)"
+  "note": "Reachy's head turns slightly more toward where the duck lies (head yaw offset +0.25 rad, kept through the moves; no pitch: the head hits the body)"
  },
  {
   "t": 79.1,
