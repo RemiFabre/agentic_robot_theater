@@ -264,8 +264,8 @@ def main():
             events.append((ts, "say", (b["text"], wav_len(wav))))
         if "body_yaw" in b:
             events.append((t0, "body_yaw", float(b["body_yaw"])))
-        if "look_down" in b:
-            events.append((t0, "look_down", float(b["look_down"])))
+        if "look_yaw" in b:
+            events.append((t0, "look_yaw", float(b["look_yaw"])))
         if b.get("emotions"):
             events.append((t0, "gesture", b["emotions"][0]))
         length = max(b.get("hold", 0.0), need, say, 0.3)
@@ -289,7 +289,7 @@ def main():
     skill_until, move_until, move = 0.0, 0.0, (0, 0, 0)
     standup = None
     body_yaw = 0.0
-    look_down = 0.0
+    look_yaw = 0.0
     quack_until = 0.0
     caption, caption_until = "", 0.0
     beat_label = ""
@@ -332,12 +332,11 @@ def main():
                 beat_label = "Reachy"
             elif what == "gesture":
                 g = reachy_gesture(arg)
-                g["yaw"] = g.get("yaw", 0.0) + body_yaw          # the puppet's body is fixed: the body turn rides the head yaw
-                g["pitch"] = g.get("pitch", 0.0) + look_down
+                g["yaw"] = g.get("yaw", 0.0) + body_yaw + look_yaw   # the puppet's body is fixed: the turns ride the head yaw
                 rm.pose(tau=0.5, **g)
-            elif what == "look_down":
-                look_down = arg
-                rm.pose(tau=0.8, pitch=rm.tgt.get("pitch", 0.0) + look_down)
+            elif what == "look_yaw":
+                look_yaw = arg
+                rm.pose(tau=0.8, yaw=rm.tgt.get("yaw", 0.0) + look_yaw)
             elif what == "body_yaw":
                 body_yaw = arg
                 rm.pose(tau=0.8, yaw=rm.tgt["yaw"] - (rm.tgt.get("yaw", 0.0) - body_yaw))

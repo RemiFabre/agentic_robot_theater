@@ -8,8 +8,8 @@ goes back to sleep, the duck's expression is stopped). Spoken beats need <scene_
 Timing keys (episode 3 v3): `say_at` delays the line inside the beat (the duck cue fires at the beat start);
 `cap` cuts the Reachy move chain at that many seconds (moves are otherwise never cut short); `body_yaw`
 turns Reachy's WHOLE robot (radians, 1 s) at the beat start and keeps it until a later beat sets another
-value (0 = facing front); `look_down` (radians, positive = down) is a head-pitch offset kept the same way
-(Reachy looks at the floor where the duck died). The daemon's automatic body yaw keeps the head pointing where it was while the
+value (0 = facing front); `look_yaw` (radians, positive = left) is a head-only yaw offset kept the same way
+(Reachy's head turns a little more toward where the duck lies; never pitch the head down: it hits the body). The daemon's automatic body yaw keeps the head pointing where it was while the
 body turns, so the turn rotates the head target too, and while an offset is active the recorded moves
 are played by our own loop with their head poses rotated and their body yaw offset by the same angle
 (the head and the moves follow the body, as Rémi wants).
@@ -80,18 +80,18 @@ class EmotionRunner:
     def __init__(self, mini, moves):
         self.mini, self.moves, self.th = mini, moves, None
         self.yaw = 0.0        # the scene's body-yaw offset, applied to every target while it is active
-        self.pitch = 0.0      # the scene's `look_down` head-pitch offset (rad, positive = down), same idea
+        self.look = 0.0       # the scene's `look_yaw` head-only yaw offset (rad, positive = left), same idea
 
     def frame(self):
-        return rot_z(self.yaw) @ rot_y(self.pitch)
+        return rot_z(self.yaw + self.look)
 
     def active(self):
-        return abs(self.yaw) > 1e-3 or abs(self.pitch) > 1e-3
+        return abs(self.yaw) > 1e-3 or abs(self.look) > 1e-3
 
-    def turn(self, yaw=None, pitch=None, duration=1.0):
-        """Turn the whole robot (body and head together) to `yaw` radians and/or pitch the head down."""
+    def turn(self, yaw=None, look=None, duration=1.0):
+        """Turn the whole robot (body and head together) to `yaw` radians and/or the head alone by `look`."""
         if yaw is not None: self.yaw = float(yaw)
-        if pitch is not None: self.pitch = float(pitch)
+        if look is not None: self.look = float(look)
         self.mini.goto_target(head=self.frame(), body_yaw=self.yaw, duration=duration)
 
     def _play_turned(self, move):
@@ -183,8 +183,8 @@ def main():
                         need = beat_cue(duck, b)
                     except (OSError, RuntimeError) as e:
                         say(f"!!! duck cue failed: {e}")
-                if "body_yaw" in b or "look_down" in b:
-                    em.turn(yaw=b.get("body_yaw"), pitch=b.get("look_down"))
+                if "body_yaw" in b or "look_yaw" in b:
+                    em.turn(yaw=b.get("body_yaw"), look=b.get("look_yaw"))
                 em.start(b.get("emotions", []))
                 if b.get("text"):
                     isleep(b.get("say_at", 0.0))

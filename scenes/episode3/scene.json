@@ -163,8 +163,8 @@
   "cap": 12.2,
   "tail": 0.2,
   "gap": 0.2,
-  "look_down": 0.5,
-  "note": "Reachy first looks down where the duck died (head pitch offset 0.5 rad, kept through the moves)"
+  "note": "Reachy's head turns slightly more toward where the duck lies (head yaw offset +0.25 rad, kept through the moves; no pitch: the head hits the body)",
+  "look_yaw": 0.25
  },
  {
   "id": "lament",
@@ -190,8 +190,7 @@
     "duck_sound": "chirp"
    }
   ],
-  "note": "Reachy turns its body away (1.4 rad) and laments; the duck's two Start presses at 0.6 and 3.6 s; a quack right on 'first quacks' (8.2 s)",
-  "look_down": 0.25
+  "note": "Reachy turns its body away (1.4 rad) and laments; the duck's two Start presses at 0.6 and 3.6 s; a quack right on 'first quacks' (8.2 s)"
  },
  {
   "id": "duck_rises",
@@ -209,7 +208,7 @@
   "cap": 5.1,
   "tail": 0.1,
   "gap": 0.1,
-  "look_down": 0.0
+  "look_yaw": 0.0
  },
  {
   "id": "duck_laugh",
