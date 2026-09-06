@@ -2,196 +2,189 @@
  {
   "t": 1.0,
   "id": "duck_excited",
-  "length": 3.5,
+  "length": 3.4,
   "text": "",
   "note": "Microduck, excited about the lake"
  },
  {
-  "t": 4.8,
-  "id": "duck_pick",
-  "length": 5.0,
-  "text": "",
-  "note": "Microduck picks the leash up (the beak opens on the way down, closes at the ground)"
- },
- {
-  "t": 10.1,
+  "t": 4.5,
   "id": "lake",
-  "length": 9.3,
+  "length": 9.9,
   "text": "[sighs] The lake. [pause] The lake. [weary] You are obsessed with the lake. [pause] But you are not a duck. [firmly] You are a Microduck.",
-  "note": ""
+  "note": "Microduck picks the leash up; the line starts as its beak reaches the ground (0.8 s)"
  },
  {
-  "t": 19.7,
+  "t": 14.5,
   "id": "duck_mmh_1",
-  "length": 2.2,
+  "length": 2.0,
   "text": "",
   "note": "\"What do you mean?\" \u2014 the beak opens, the leash falls"
  },
  {
-  "t": 22.1,
+  "t": 16.6,
   "id": "difference",
-  "length": 4.1,
+  "length": 3.9,
   "text": "[patiently] The difference... [pause] the difference, is your water resistance.",
   "note": ""
  },
  {
-  "t": 26.5,
-  "id": "duck_quack_quack",
-  "length": 1.4,
+  "t": 20.6,
+  "id": "duck_defiant",
+  "length": 2.2,
   "text": "",
-  "note": "quack quack (RT twice)"
+  "note": "defiance: beak up-left, quack; up-right, quack"
  },
  {
-  "t": 28.1,
+  "t": 22.9,
   "id": "sun",
-  "length": 9.2,
+  "length": 9.0,
   "text": "[worried] And the sun. [anxious] Do we even know what the sun does to us? [alarmed] Do we use sun cream? That is also a liquid! [panicking] Will it get into our circuits? [pause] [firmly] We shouldn't go.",
   "note": ""
  },
  {
-  "t": 37.6,
-  "id": "duck_mmh_2",
-  "length": 2.2,
+  "t": 32.0,
+  "id": "duck_impatient",
+  "length": 2.6,
   "text": "",
-  "note": "\"What do you mean?\""
+  "note": "\"Come on!\""
  },
  {
-  "t": 40.1,
+  "t": 34.7,
   "id": "duck_yes",
-  "length": 1.6,
+  "length": 1.5,
   "text": "",
   "note": ""
  },
  {
-  "t": 41.9,
+  "t": 36.2,
   "id": "no_1",
-  "length": 0.7,
+  "length": 0.5,
   "text": "[firmly] No.",
   "note": ""
  },
  {
-  "t": 42.8,
+  "t": 36.7,
   "id": "duck_yes_fast_1",
   "length": 1.5,
   "text": "",
   "note": ""
  },
  {
-  "t": 44.4,
+  "t": 38.2,
   "id": "no_2",
-  "length": 1.1,
+  "length": 0.9,
   "text": "[louder] No!",
   "note": ""
  },
  {
-  "t": 45.7,
+  "t": 39.1,
   "id": "duck_yes_fast_2",
   "length": 1.5,
   "text": "",
   "note": ""
  },
  {
-  "t": 47.5,
+  "t": 40.7,
   "id": "asimov",
-  "length": 4.3,
+  "length": 4.1,
   "text": "[exasperated] Oh, Asimov. [pause] [pleading] Give me the strength, for this one.",
   "note": ""
  },
  {
-  "t": 52.2,
+  "t": 44.9,
   "id": "duck_angry",
-  "length": 3.0,
+  "length": 2.6,
   "text": "",
   "note": "Microduck gets angry"
  },
  {
-  "t": 55.7,
+  "t": 47.6,
   "id": "bad_duck",
-  "length": 8.3,
-  "text": "[gasps] Oh! [pause] [hurt] How... [pause] how dare you say that, to my face. [pause] [wounded] You are... [pause] you are a bad duck.",
+  "length": 11.9,
+  "text": "[gasps] Oh! [pause] [hurt] How... [pause] how dare you say that, to my face. [pause] [indignant] And my face is, like, fifty percent of me. [pause] [wounded] You are... [pause] you are a bad duck.",
   "note": ""
  },
  {
-  "t": 64.6,
+  "t": 59.6,
   "id": "duck_play_dead",
-  "length": 8.5,
+  "length": 7.5,
   "text": "",
-  "note": "Microduck: shock quack, sits, keels over backwards, torque back on, death quack"
+  "note": "Microduck: shock quack, sits, rolls onto its back, legs up, death quack"
  },
  {
-  "t": 73.9,
+  "t": 67.3,
   "id": "are_you_ok",
-  "length": 12.3,
+  "length": 12.1,
   "text": "[alarmed] Microduck? [pause] Microduck, are you all right? [panicking] No. Microduck, no. [pause] Did you die? [pause] Did I kill you with my extremely insensitive comment? [pause] Did it overwhelm your emotional circuitry?",
   "note": ""
  },
  {
-  "t": 86.7,
+  "t": 79.6,
   "id": "lament",
-  "length": 8.8,
+  "length": 8.7,
   "text": "[grieving] Oh my dear friend. [pause] You were so young. [pause] You had so much to learn. [sobbing] What have I done. [pause] [wistful] I still remember your first quacks...",
-  "note": "Reachy looks away; 0.6 s later the duck's first Start (torque on, ramp home), 3 s later the second Start (policy on): the duck stands up"
+  "note": "Reachy turns its body away (1.4 rad) and laments; the duck's two Start presses at 0.6 and 3.6 s; a quack right on 'first quacks' (8.2 s)"
  },
  {
-  "t": 95.5,
-  "id": "duck_first_quack",
-  "length": 0.6,
-  "text": "",
-  "note": "a quack right after 'your first quacks'"
- },
- {
-  "t": 96.2,
+  "t": 88.3,
   "id": "duck_rises",
   "length": 0.5,
   "text": "",
-  "note": "R\u00e9mi: if the duck did not stand, Start again; turn it to face Reachy with the stick; then ENTER"
+  "note": "R\u00e9mi: if the duck did not stand, Start again; turn it to face Reachy at three-quarters; then ENTER"
  },
  {
-  "t": 96.7,
+  "t": 88.8,
   "id": "like_that",
-  "length": 5.1,
+  "length": 4.9,
   "text": "[dreamily] Yes. [pause] Like that. [pause] I still hear you, in my mind.",
   "note": ""
  },
  {
-  "t": 102.1,
+  "t": 93.8,
   "id": "duck_laugh",
   "length": 3.0,
   "text": "",
   "note": "Microduck laughs"
  },
  {
-  "t": 105.5,
+  "t": 96.9,
   "id": "alive",
-  "length": 3.4,
+  "length": 3.2,
   "text": "[gasps] Microduck! [overjoyed] You are alive!",
-  "note": ""
+  "note": "Reachy turns back"
  },
  {
-  "t": 109.1,
+  "t": 100.1,
   "id": "duck_excited_2",
-  "length": 3.5,
+  "length": 3.4,
   "text": "",
-  "note": ""
+  "note": "keep: Reachy's head goes up and down with the duck"
  },
  {
-  "t": 112.9,
+  "t": 103.6,
   "id": "relieved",
-  "length": 12.4,
+  "length": 11.5,
   "text": "[relieved] I am so relieved to see you well. [pause] I will never talk to you like that again. [earnest] But please. [pause] Please, be careful. [gravely] The world is dangerous, and you are fragile. [pause] [gently] Can you promise me that?",
   "note": ""
  },
  {
-  "t": 125.3,
-  "id": "duck_roulade",
-  "length": 4.0,
+  "t": 115.1,
+  "id": "duck_promise",
+  "length": 1.5,
   "text": "",
-  "note": "one second of thought, then the roulade; R\u00e9mi handles Select"
+  "note": "Microduck promises (a nod)"
  },
  {
-  "t": 130.1,
+  "t": 116.6,
+  "id": "what_a_relief",
+  "length": 2.4,
+  "text": "[relieved] What a relief.",
+  "note": "as soon as Reachy says it, the roulade (R\u00e9mi handles Select)"
+ },
+ {
+  "t": 119.0,
   "id": "die_again",
-  "length": 5.0,
+  "length": 4.0,
   "text": "[hesitant] Did... [pause] did you die again?",
   "note": ""
  }
