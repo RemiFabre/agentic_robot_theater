@@ -5,6 +5,11 @@ Setup first (load emotions, connect, motors on, wake-up move, ping the duck), th
 --start-delay and starts beat 0; ESC/q/Ctrl+C aborts at any point (motion + audio stop, robot
 goes back to sleep, the duck's expression is stopped). Spoken beats need <scene_dir>/audio/<id>.wav.
 
+Timing keys (episode 3 v3): `say_at` delays the line inside the beat (the duck cue fires at the beat start);
+`cap` cuts the Reachy move chain at that many seconds (moves are otherwise never cut short); `body_yaw`
+turns Reachy's body (radians, `goto_target`, 1 s) at the beat start and keeps it until a later beat sets
+another value (0 = facing front); recorded moves may reset it on the real robot: to verify.
+
 Two robots (episode 3): a beat may also carry ONE duck cue — `"duck": "excited"` (an emotion of
 the film build, see microduck/EMOTIONS.md), `"duck_skill": "ground_pick"`, `"duck_sound": "chirp"`
 or `"duck_move": [vx, vy, wz], "for": 1.5` — sent to the duck's pad daemon over TCP (duck_cue.py,
@@ -63,12 +68,12 @@ class EmotionRunner:
                 self.mini.play_move(self.moves.get(n), initial_goto_duration=0.4 if i == 0 else 0.0, sound=False)
         self.th = threading.Thread(target=run, daemon=True); self.th.start()
 
-    def wait(self, timeout=EMOTION_CAP_S):
-        t0 = time.time()
+    def wait(self, timeout=EMOTION_CAP_S, started_at=None):
+        t0 = started_at or time.time()
         while self.th and self.th.is_alive() and time.time() - t0 < timeout:
             isleep(0.05)
         if self.th and self.th.is_alive():
-            self.mini._move_cancelled = True; self.th.join(2.0)
+            self.mini.cancel_move(); self.th.join(2.0)
 
 
 def main():
@@ -128,12 +133,15 @@ def main():
                         need = beat_cue(duck, b)
                     except (OSError, RuntimeError) as e:
                         say(f"!!! duck cue failed: {e}")
+                if "body_yaw" in b:
+                    mini.goto_target(body_yaw=float(b["body_yaw"]), duration=1.0)
                 em.start(b.get("emotions", []))
                 if b.get("text"):
+                    isleep(b.get("say_at", 0.0))
                     p = os.path.join(a.scene_dir, "audio", f"{b['id']}.wav")
                     mini.media.play_sound(os.path.abspath(p))
                     isleep(audio_duration_seconds(p) + b.get("tail", 0.3))
-                em.wait()
+                em.wait(timeout=b.get("cap", EMOTION_CAP_S), started_at=bt)
                 isleep(max(b.get("hold", 0.0), need) - (time.time() - bt))
                 isleep(b.get("gap", 0.0))
             say(f"end, lingering {LINGER_S}s (ESC to sleep now)"); isleep(LINGER_S)

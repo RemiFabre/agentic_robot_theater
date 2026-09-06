@@ -142,6 +142,16 @@ def emotion(name):
             sys.argv = argv
         m, wav, _ = mod.pick() if name == "laugh" else mod.pick_mock()
         return m, Path(wav)
+    if name in ("defiant", "impatient"):
+        mod_path = EMO / f"motion/{name}/render_{name}.py"
+        spec = importlib.util.spec_from_file_location(f"emo_{name}", mod_path); mod = importlib.util.module_from_spec(spec)
+        argv, sys.argv = sys.argv, [str(mod_path)]
+        try:
+            spec.loader.exec_module(mod)
+        finally:
+            sys.argv = argv
+        m, wav, _ = mod.pick()
+        return m, Path(wav)
     if name == "yes_fast":
         m, _ = emotion("yes")
         return L.Motion("yes_fast", m.desc, m.total, m.fn, m.beats), EMO / "sounds/yes/yes_single__Y3_synth_wak.wav"
@@ -248,9 +258,12 @@ def main():
         say = 0.0
         if b.get("text"):
             wav = scene / "audio" / f"{b['id']}.wav"
-            say = wav_len(wav) + b.get("tail", 0.3)
-            audio.append((t0, wav))
-            events.append((t0, "say", (b["text"], wav_len(wav))))
+            ts = t0 + float(b.get("say_at", 0.0))
+            say = ts - t0 + wav_len(wav) + b.get("tail", 0.3)
+            audio.append((ts, wav))
+            events.append((ts, "say", (b["text"], wav_len(wav))))
+        if "body_yaw" in b:
+            events.append((t0, "body_yaw", float(b["body_yaw"])))
         if b.get("emotions"):
             events.append((t0, "gesture", b["emotions"][0]))
         length = max(b.get("hold", 0.0), need, say, 0.3)
@@ -273,6 +286,7 @@ def main():
     express, express_t0 = None, 0.0
     skill_until, move_until, move = 0.0, 0.0, (0, 0, 0)
     standup = None
+    body_yaw = 0.0
     quack_until = 0.0
     caption, caption_until = "", 0.0
     beat_label = ""
@@ -314,7 +328,12 @@ def main():
                 talk_until = tt + arg[1]
                 beat_label = "Reachy"
             elif what == "gesture":
-                rm.pose(tau=0.5, **reachy_gesture(arg))
+                g = reachy_gesture(arg)
+                g["yaw"] = g.get("yaw", 0.0) + body_yaw          # the puppet's body is fixed: the body turn rides the head yaw
+                rm.pose(tau=0.5, **g)
+            elif what == "body_yaw":
+                body_yaw = arg
+                rm.pose(tau=0.8, yaw=rm.tgt["yaw"] - (rm.tgt.get("yaw", 0.0) - body_yaw))
         if rm.talking and tt >= talk_until:
             rm.talking = False
         # the duck's intents this tick
