@@ -197,7 +197,9 @@ def main():
     # --- run --------------------------------------------------------------------------------------------------
     import re
     strip = lambda s: re.sub(r"\[[^\]]*\]\s*", "", s).strip()
-    frames = []
+    silent = out.with_suffix(".silent.mp4")
+    writer = imageio.get_writer(str(silent), fps=FPS, codec="libx264", pixelformat="yuv420p", macro_block_size=8,
+                                output_params=["-crf", "20", "-movflags", "+faststart"])
     next_frame = 0.0
     express, express_t0 = None, 0.0
     skill_until, move_until, move = 0.0, 0.0, (0, 0, 0)
@@ -279,11 +281,9 @@ def main():
                 ov.caption(dr, wrap(caption, 60))
             dr.text((16, 12), f"{tt:5.1f} s   {beat_label}   (duck net: {du.net})", font=ov.font(F.FONT_CAPTION, 26 * ov.s),
                     fill="white", stroke_width=2, stroke_fill="black")
-            frames.append(np.asarray(img))
+            writer.append_data(np.asarray(img))
             next_frame += 1.0 / FPS
-    silent = out.with_suffix(".silent.mp4")
-    imageio.mimwrite(str(silent), frames, fps=FPS, codec="libx264", pixelformat="yuv420p", macro_block_size=8,
-                     output_params=["-crf", "20", "-movflags", "+faststart"])
+    writer.close()
     # audio mix
     cmd = ["ffmpeg", "-v", "error", "-y", "-i", str(silent)]
     parts = []
