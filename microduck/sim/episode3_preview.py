@@ -254,7 +254,7 @@ def main():
                     events.append((tc + 3.0, "face", None))     # once up, the preview turns the duck to face Reachy (Rémi's stick)
                 need = max(need, tc - t0 + 0.5)
         if b.get("wait") == "key":
-            need = max(need, 0.5)           # Rémi's ENTER: in the preview the duck already faces Reachy (turned during the lament)
+            pass                            # Rémi's ENTER: in the preview the duck already faces Reachy (turned during the lament), no pause
         say = 0.0
         if b.get("text"):
             wav = scene / "audio" / f"{b['id']}.wav"
@@ -264,6 +264,8 @@ def main():
             events.append((ts, "say", (b["text"], wav_len(wav))))
         if "body_yaw" in b:
             events.append((t0, "body_yaw", float(b["body_yaw"])))
+        if "look_down" in b:
+            events.append((t0, "look_down", float(b["look_down"])))
         if b.get("emotions"):
             events.append((t0, "gesture", b["emotions"][0]))
         length = max(b.get("hold", 0.0), need, say, 0.3)
@@ -287,6 +289,7 @@ def main():
     skill_until, move_until, move = 0.0, 0.0, (0, 0, 0)
     standup = None
     body_yaw = 0.0
+    look_down = 0.0
     quack_until = 0.0
     caption, caption_until = "", 0.0
     beat_label = ""
@@ -330,7 +333,11 @@ def main():
             elif what == "gesture":
                 g = reachy_gesture(arg)
                 g["yaw"] = g.get("yaw", 0.0) + body_yaw          # the puppet's body is fixed: the body turn rides the head yaw
+                g["pitch"] = g.get("pitch", 0.0) + look_down
                 rm.pose(tau=0.5, **g)
+            elif what == "look_down":
+                look_down = arg
+                rm.pose(tau=0.8, pitch=rm.tgt.get("pitch", 0.0) + look_down)
             elif what == "body_yaw":
                 body_yaw = arg
                 rm.pose(tau=0.8, yaw=rm.tgt["yaw"] - (rm.tgt.get("yaw", 0.0) - body_yaw))
