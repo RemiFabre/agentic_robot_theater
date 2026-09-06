@@ -7,8 +7,11 @@ goes back to sleep, the duck's expression is stopped). Spoken beats need <scene_
 
 Timing keys (episode 3 v3): `say_at` delays the line inside the beat (the duck cue fires at the beat start);
 `cap` cuts the Reachy move chain at that many seconds (moves are otherwise never cut short); `body_yaw`
-turns Reachy's body (radians, `goto_target`, 1 s) at the beat start and keeps it until a later beat sets
-another value (0 = facing front); recorded moves may reset it on the real robot: to verify.
+turns Reachy's WHOLE robot (radians, 1 s) at the beat start and keeps it until a later beat sets another
+value (0 = facing front). The daemon's automatic body yaw keeps the head pointing where it was while the
+body turns, so the turn rotates the head target too, and while an offset is active the recorded moves
+are played by our own loop with their head poses rotated and their body yaw offset by the same angle
+(the head and the moves follow the body, as Rémi wants).
 
 Two robots (episode 3): a beat may also carry ONE duck cue — `"duck": "excited"` (an emotion of
 the film build, see microduck/EMOTIONS.md), `"duck_skill": "ground_pick"`, `"duck_sound": "chirp"`
@@ -18,7 +21,9 @@ same beat, and the beat lasts at least as long as the duck needs (the daemon ans
 emotion's length). The gamepad stays alive between cues. `"wait": "key"` makes a beat wait for
 ENTER before it runs (for the moments Rémi pilots the duck by hand: standing it up, turning it).
 """
-import argparse, json, os, select, sys, termios, threading, time, tty
+import argparse, json, math, os, select, sys, termios, threading, time, tty
+
+import numpy as np
 
 from duck_cue import Duck, beat_cue, has_cue
 
@@ -57,15 +62,44 @@ def say(msg):
     print(msg, end="\r\n", flush=True)  # raw tty needs explicit CR
 
 
+def rot_z(yaw):
+    c, s_ = math.cos(yaw), math.sin(yaw)
+    m = np.eye(4); m[0, 0], m[0, 1], m[1, 0], m[1, 1] = c, -s_, s_, c
+    return m
+
+
 class EmotionRunner:
     def __init__(self, mini, moves):
         self.mini, self.moves, self.th = mini, moves, None
+        self.yaw = 0.0        # the scene's body-yaw offset, applied to every target while it is active
+
+    def turn(self, yaw, duration=1.0):
+        """Turn the whole robot (body and head together) to `yaw` radians."""
+        self.yaw = float(yaw)
+        self.mini.goto_target(head=rot_z(self.yaw), body_yaw=self.yaw, duration=duration)
+
+    def _play_turned(self, move):
+        """The SDK's play loop with the yaw offset on the head pose and the body yaw (100 Hz)."""
+        t0 = time.time()
+        while time.time() - t0 < move.duration and not stop_ev.is_set() and not self.mini._move_cancelled:
+            t = min(time.time() - t0, move.duration - 1e-2)
+            head, antennas, body_yaw = move.evaluate(t)
+            if head is not None:
+                self.mini.set_target_head_pose(rot_z(self.yaw) @ head)
+            self.mini.set_target_body_yaw((body_yaw or 0.0) + self.yaw)
+            if antennas is not None:
+                self.mini.set_target_antenna_joint_positions(list(antennas))
+            time.sleep(max(0.001, 0.01 - (time.time() - t0 - t)))
 
     def start(self, names):
         def run():
             for i, n in enumerate(names):
                 if stop_ev.is_set(): return
-                self.mini.play_move(self.moves.get(n), initial_goto_duration=0.4 if i == 0 else 0.0, sound=False)
+                if abs(self.yaw) > 1e-3:
+                    self.mini._move_cancelled = False
+                    self._play_turned(self.moves.get(n))
+                else:
+                    self.mini.play_move(self.moves.get(n), initial_goto_duration=0.4 if i == 0 else 0.0, sound=False)
         self.th = threading.Thread(target=run, daemon=True); self.th.start()
 
     def wait(self, timeout=EMOTION_CAP_S, started_at=None):
@@ -134,7 +168,7 @@ def main():
                     except (OSError, RuntimeError) as e:
                         say(f"!!! duck cue failed: {e}")
                 if "body_yaw" in b:
-                    mini.goto_target(body_yaw=float(b["body_yaw"]), duration=1.0)
+                    em.turn(float(b["body_yaw"]))
                 em.start(b.get("emotions", []))
                 if b.get("text"):
                     isleep(b.get("say_at", 0.0))
