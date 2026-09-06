@@ -20,8 +20,10 @@ from PIL import Image, ImageDraw
 
 sys.path.insert(0, "/Users/remi/microduck/notes/reachy-encounter")
 sys.path.insert(0, "/Users/remi/microduck/notes/emotions/motion/episode3")
+sys.path.insert(0, "/Users/remi/microduck/notes/emotions/motion/playdead")
 import duckfilm as F  # noqa: E402
 import lib as L  # noqa: E402
+from pdduck3 import PDDuck3  # noqa: E402  (robot.poseJoints in simulation: head servos free, legs posed)
 
 EMO = Path("/Users/remi/microduck/notes/emotions")
 F.POLICIES["ground_pick"] = F.WS / "microduck/policies/alpha_ground_pick.onnx"
@@ -31,12 +33,20 @@ FPS = 25
 DUCK_AT, REACHY_AT = (0.0, 0.0, 0.0), (0.62, 0.0, math.pi)
 
 
-class SceneDuck(L.Duck3):
-    """The film duck plus the ground pick (phase-encoded twist, as robotd drives it)."""
+class SceneDuck(PDDuck3):
+    """The film duck plus the ground pick (phase-encoded twist, as robotd drives it) and the scripted joint pose."""
     def __init__(self, *a, **k):
         super().__init__(*a, **k)
         self.gp_phase = None
         self.hold_home = False        # after `robot.init`: torque on, holding the home pose, no policy (until the second Start)
+
+    def wake(self, t):
+        """robot.init out of the dead pose / a relax: torque on everywhere, a 2 s ramp home, then hold."""
+        self.pose_at, self.posing, self.stage2, self._stage2_done, self._pose_t0 = None, False, None, False, None
+        self.off = []
+        self.relax, self.soften, self._soften_t0 = False, False, None
+        self.ramp = (t, 2.0, self.q())
+        self.hold_home = True
 
     def control_tick(self, t):
         if self.hold_home and self.ramp is None and not self.relax:
@@ -121,6 +131,16 @@ def emotion(name):
         mod_path = EMO / "motion/mmh/render_mmh.py"
         spec = importlib.util.spec_from_file_location("emo_mmh", mod_path); mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod); m, wav, _ = mod.pick(); return m, Path(wav)
+    if name in ("laugh", "mock"):
+        mod_path = EMO / "motion/laugh/laugh_v2.py"
+        spec = importlib.util.spec_from_file_location("emo_laugh2", mod_path); mod = importlib.util.module_from_spec(spec)
+        argv, sys.argv = sys.argv, [str(mod_path)]
+        try:
+            spec.loader.exec_module(mod)
+        finally:
+            sys.argv = argv
+        m, wav, _ = mod.pick() if name == "laugh" else mod.pick_mock()
+        return m, Path(wav)
     if name == "yes_fast":
         m, _ = emotion("yes")
         return L.Motion("yes_fast", m.desc, m.total, m.fn, m.beats), EMO / "sounds/yes/yes_single__Y3_synth_wak.wav"
@@ -198,6 +218,9 @@ def main():
                 events.append((tc, "express", mo))
                 if wav:
                     audio.append((tc, wav))
+                if c["duck"] == "play_dead":          # the dead pose: robot.poseJoints stages from the pick
+                    pk = json.load(open(EMO / "motion/playdead/PICK.json"))
+                    events.append((tc, "dead_pose", pk["pose_joints"]))
                 need = max(need, tc - t0 + mo.total)
             elif "duck_skill" in c:
                 events.append((tc, "skill", c["duck_skill"]))
@@ -266,6 +289,12 @@ def main():
                 beat_label = f"duck: {arg}"
             elif what == "move":
                 move, move_until = tuple(arg[0]), tt + arg[1]
+            elif what == "dead_pose":
+                st = arg
+                du.time_offset = tt
+                du.set_pose_joints(st[0]["at"], st[0]["targets"], st[0]["off"], st[0]["gain"], st[0]["ramp_s"])
+                du.stage2 = (st[1]["at"], st[1]["targets"], st[1]["ramp_s"]) if len(st) > 1 else None
+                du._stage2_done = False
             elif what == "init":
                 standup = ("ramp", tt)
                 beat_label = "duck: Start (init)"
@@ -310,9 +339,7 @@ def main():
         if standup is not None:
             phase, ts = standup
             if phase == "ramp":
-                du.relax, du.soften, du._soften_t0 = False, False, None
-                du.ramp = (tt, 2.0, du.q())
-                du.hold_home = True
+                du.wake(tt)
                 standup = None
             elif phase == "rise" and tt >= ts:
                 du.hold_home = False

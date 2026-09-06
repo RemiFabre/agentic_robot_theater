@@ -19,11 +19,12 @@ Rémi's decisions). This page is the short bridge from the theater repo.
 | **X** | angry | standing; beak-up glare, four snaps (yaw +0.7/-0.7/+0.7/centre, a short head jab, a small bow pulse), the beak forced wide 0.3-0.7 s so a held leash drops; 2.6 s | four hard barks on the snaps (or a growl into them: two wavs, random) |
 | **LB** | yes | one nod (head_pitch +0.7, 0.25 s down, 0.35 s up); 1.5 s | one quack falling 3 semitones at 0.45 s |
 | **L3** | yes, fast | the same nod; 1.5 s | a curt "wak" |
-| **R3** | laugh | beak up, head wagging on every other "ha", a body dip on every "ha"; 2.6 s | seven staccato quacks stepping down ("ha-ha-ha-ha, ha-ha-ha") |
+| **R3** | laugh | beak aimed up (-0.7), head wagging, a body dip on every "ha"; 3.0 s | one longer "haaa" then seven short ha's dying out |
+| (cue) | mock | `laugh_roll`: beak up, the head rolling +-0.35, body dips; 2.6 s | the staccato run "gnagnagnagna" (after a scolding) |
 | **RB** | no | one head shake (yaw +0.55 at 0.35 s, -0.55 at 0.85 s); 1.8 s | "no-ah": two notes, the second a fourth lower (three wavs, random) |
 | **DPad-Down** | excited | six accelerating head swings +-0.6 with a body bob on each, the beak climbing to -0.7, a bow flourish; 3.4 s | six synth quacks, each higher, shorter, rising more (X1) |
 | (cue) | pick | the ground pick with the beak opening on the way down and shutting at the floor (the leash grasp); 3.0 s | none |
-| **DPad-Left** | play dead | sits on the press (shock), head back and to the side, `robot.soften` at 2.2 s: keels over backwards, flat on its back with the head on the side by ~4.8 s; ends LIMP (Start = the way up); 7.5 s | alarm, silence, a falling glide with a dying wobble (4.8-6.6 s, beak 0.3; on the robot the jaw is gated on "driving", so probably shut) |
+| **DPad-Left** | play dead | sits on the press (shock), head hard to the side and back; at 1.4 s the three head servos hang free and the legs straighten (`robot.poseJoints`): it rolls flat onto its back, limp head on the side; legs up at 3.6 s; holds the dead pose until Start (the full init); 7.5 s | alarm, silence, a falling glide with a dying wobble (5.0-6.8 s, beak 0.3, the jaw stays powered) |
 
 Start, Select, the sticks, the triggers (mouth + chirp / wheee) and DPad-Right (servo reboot) keep working in both
 modes. Sticks are locked during an expression. Episode 3 (2026-09-06) added X / LB / RB / DPad-Down / DPad-Left, all

@@ -23,31 +23,38 @@ tested pick spot; a mat behind the duck for the play-dead fall. The pad stays al
 turn the duck with the stick. At `duck_rises` the player waits for ENTER: Start (sit-stand rise), turn the duck
 to face Reachy, then ENTER.
 
-## Beats (times from beat 0, lengths from the wavs and the emotion lengths; total 127 s + the pause at `duck_rises`)
+## Beats (times from beat 0, lengths from the wavs and the emotion lengths; total 135 s + the pause at `duck_rises`; v2 of 2026-09-06 evening)
 
 | t | beat | length | who / what | camera, notes |
 |---|---|---|---|---|
 | 0.0 | `duck_excited` | 3.5 s | **Duck: excited** (3.4 s) | Microduck, excited about the lake |
-| 3.8 | `duck_pick` | 5.0 s | **Duck: ground_pick** / Reachy: attentive1 | Microduck picks the leash up from the ground (leash placed at the tested spot) |
-| 9.1 | `lake` | 9.9 s | Reachy: "[sighs] The lake. [pause] The lake. [weary] You are obsessed with the lake. [pause] But you are not a dog, Microduck. [firmly] You are a Microduck." (9.6 s) under reprimand1 |  |
-| 19.3 | `duck_closed_1` | 2.6 s | **Duck: closed_quack** (2.2 s) / Reachy: inquiring1 | Microduck quacks with the beak closed (the leash stays in) |
-| 22.1 | `difference` | 4.1 s | Reachy: "[patiently] The difference... [pause] the difference, is your water resistance." (3.8 s) under thoughtful1 |  |
-| 26.6 | `duck_closed_2` | 2.6 s | **Duck: closed_quack** (2.2 s) / Reachy: attentive2 |  |
-| 29.4 | `sun` | 11.3 s | Reachy: "[worried] And the sun. [pause] Do we even know what the sun does to us? [anxious] Do we use sun cream? [pause] That is also a liquid. [escalating] Will it get into our circuits? [alarmed] Will it get into MY circuits?" (11.0 s) under anxiety1, frustrated1 |  |
-| 41.0 | `duck_angry` | 3.5 s | **Duck: angry** (2.6 s) / Reachy: surprised2 | Microduck gets angry: the beak opens, the leash drops |
-| 45.0 | `bad_dog` | 9.1 s | Reachy: "[shocked] ... [pause] How... [pause] how dare you say that, to my face. [pause] [wounded] You are... [pause] you are a bad dog." (8.6 s) under displeased2, contempt1 |  |
-| 54.6 | `duck_play_dead` | 8.0 s | **Duck: play_dead** (7.5 s) / Reachy: surprised1 | Microduck: shock quack, sits, tips over backwards, death quack |
-| 63.4 | `are_you_ok` | 12.3 s | Reachy: "[alarmed] Microduck? [pause] Microduck, are you all right? [panicking] No. Microduck, no. [pause] Did you die? [pause] Did I kill you with my extremely insensitive comment? [pause] Did it overwhelm your emotional circuitry?" (11.9 s) under scared1, fear1 |  |
-| 76.3 | `lament` | 9.1 s | Reachy: "[grieving] Oh my dear friend. [pause] You were so young. [pause] You had so much to learn. [sobbing] What have I done. [pause] [wistful] I still remember your first quacks..." (8.5 s) under downcast1, lonely1 |  |
-| 85.7 | `duck_rises` | 1.0 s | **WAIT for ENTER.**  / Reachy: sad1 | Rémi: Start (sit-stand rise), turn the duck to face Reachy with the stick, then ENTER |
-| 86.9 | `duck_quack_1` | 3.0 s | **Duck: curious** (3.0 s) | the risen duck quacks (Reachy still looks away) |
-| 90.2 | `like_that` | 5.1 s | Reachy: "[dreamily] Yes. [pause] Like that. [pause] I still hear you, in my mind." (4.8 s) under thoughtful2 |  |
-| 95.5 | `duck_quack_2` | 1.6 s | **Duck: yes** (1.5 s) | quack quack |
-| 97.7 | `alive` | 3.4 s | Reachy: "[gasps] Microduck! [overjoyed] You are alive!" (3.1 s) under amazed1 |  |
-| 101.3 | `duck_excited_2` | 3.5 s | **Duck: excited** (3.4 s) / Reachy: enthusiastic1 |  |
-| 105.1 | `relieved` | 12.1 s | Reachy: "[relieved] I am so relieved to see you well, and alive. [pause] I will never talk to you like that again. [earnest] But please. [pause] Please, be careful. [gravely] The world is dangerous, and you are fragile." (11.7 s) under relief1, loving1, calming1 |  |
-| 117.6 | `duck_roulade` | 4.0 s | **Duck: roulade** / Reachy: surprised1 | Microduck does the roulade at once and very likely falls forward |
-| 122.4 | `die_again` | 5.0 s | Reachy: "[hesitant] Did... [pause] did you die again?" (2.0 s) under uncertain1 |  |
+| 3.8 | `duck_pick` | 5.0 s | **Duck: pick** (3.0 s) / Reachy: attentive1 | Microduck picks the leash up (the beak opens on the way down, closes at the ground) |
+| 9.1 | `lake` | 9.1 s | Reachy: "[sighs] The lake. [pause] The lake. [weary] You are obsessed with the lake. [pause] But you are not a dog. [firmly] You are a Microduck." (8.8 s) under reprimand1 |  |
+| 18.5 | `duck_mmh_1` | 2.2 s | **Duck: mmh** (2.0 s) / Reachy: inquiring1 | "What do you mean?" — the beak opens, the leash falls |
+| 20.9 | `difference` | 4.1 s | Reachy: "[patiently] The difference... [pause] the difference, is your water resistance." (3.8 s) under thoughtful1 |  |
+| 25.4 | `duck_quack_quack` | 1.4 s | **Duck: chirp** x2 / Reachy: attentive2 | quack quack (RT twice) |
+| 27.0 | `sun` | 9.2 s | Reachy: "[worried] And the sun. [anxious] Do we even know what the sun does to us? [alarmed] Do we use sun cream? That is also a liquid! [panicking] Will it get into our circuits? [pause] [firmly] We shouldn't go." (8.9 s) under anxiety1, frustrated1 |  |
+| 36.5 | `duck_mmh_2` | 2.2 s | **Duck: mmh** (2.0 s) / Reachy: surprised2 | "What do you mean?" |
+| 39.0 | `duck_yes` | 1.6 s | **Duck: yes** (1.5 s) |  |
+| 40.8 | `no_1` | 0.7 s | Reachy: "[firmly] No." (0.5 s) under no1 |  |
+| 41.6 | `duck_yes_fast_1` | 1.5 s | **Duck: yes_fast** (1.5 s) |  |
+| 43.2 | `no_2` | 1.1 s | Reachy: "[louder] No!" (0.9 s) under no1 |  |
+| 44.5 | `duck_yes_fast_2` | 1.5 s | **Duck: yes_fast** (1.5 s) |  |
+| 46.3 | `asimov` | 4.3 s | Reachy: "[exasperated] Oh, Asimov. [pause] [pleading] Give me the strength, for this one." (4.0 s) under exhausted1 |  |
+| 51.1 | `duck_angry` | 3.0 s | **Duck: angry** (2.6 s) / Reachy: surprised2 | Microduck gets angry |
+| 54.6 | `bad_dog` | 8.8 s | Reachy: "[gasps] Oh! [pause] [hurt] How... [pause] how dare you say that, to my face. [pause] [wounded] You are... [pause] you are a bad dog." (8.3 s) under displeased2, contempt1 |  |
+| 63.8 | `duck_play_dead` | 8.5 s | **Duck: play_dead** (7.5 s) / Reachy: surprised1 | Microduck: shock quack, sits, keels over backwards, torque back on, death quack |
+| 73.1 | `are_you_ok` | 12.3 s | Reachy: "[alarmed] Microduck? [pause] Microduck, are you all right? [panicking] No. Microduck, no. [pause] Did you die? [pause] Did I kill you with my extremely insensitive comment? [pause] Did it overwhelm your emotional circuitry?" (11.9 s) under scared1, fear1 |  |
+| 86.0 | `lament` | 8.8 s |  / duck cues: 0.6 s duck_init, 3.6 s duck_policy / Reachy: "[grieving] Oh my dear friend. [pause] You were so young. [pause] You had so much to learn. [sobbing] What have I done. [pause] [wistful] I still remember your first quacks..." (8.5 s) under lost1, downcast1 | Reachy looks away; 0.6 s later the duck's first Start (torque on, ramp home), 3 s later the second Start (policy on): the duck stands up |
+| 94.8 | `duck_first_quack` | 1.0 s | **Duck: chirp** x1 | a quack right after 'your first quacks' |
+| 96.0 | `duck_rises` | 0.3 s | **WAIT for ENTER.**  | Rémi: if the duck did not stand, Start again; turn it to face Reachy with the stick; then ENTER |
+| 96.5 | `like_that` | 5.1 s | Reachy: "[dreamily] Yes. [pause] Like that. [pause] I still hear you, in my mind." (4.8 s) under thoughtful2 |  |
+| 101.9 | `duck_laugh` | 3.0 s | **Duck: laugh** (3.0 s) | Microduck laughs |
+| 105.3 | `alive` | 3.4 s | Reachy: "[gasps] Microduck! [overjoyed] You are alive!" (3.1 s) under amazed1 |  |
+| 108.9 | `duck_excited_2` | 3.5 s | **Duck: excited** (3.4 s) / Reachy: enthusiastic1 |  |
+| 112.7 | `relieved` | 12.4 s | Reachy: "[relieved] I am so relieved to see you well. [pause] I will never talk to you like that again. [earnest] But please. [pause] Please, be careful. [gravely] The world is dangerous, and you are fragile. [pause] [gently] Can you promise me that?" (11.4 s) under relief1, loving1, calming1 |  |
+| 125.0 | `duck_roulade` | 4.0 s | **Duck: roulade** / Reachy: surprised1 | one second of thought, then the roulade; Rémi handles Select |
+| 129.8 | `die_again` | 5.0 s | Reachy: "[hesitant] Did... [pause] did you die again?" (2.0 s) under uncertain1 |  |
 
 ## Lines (refined from Rémi's draft; `[tags]` are ElevenLabs v3 audio tags, stripped from captions)
 
