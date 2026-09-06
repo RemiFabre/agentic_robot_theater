@@ -239,10 +239,11 @@ def main():
                 need = max(need, tc - t0 + 2.5)
             elif "duck_policy" in c:
                 events.append((tc, "policy", bool(c["duck_policy"])))
+                if c["duck_policy"]:
+                    events.append((tc + 3.0, "face", None))     # once up, the preview turns the duck to face Reachy (Rémi's stick)
                 need = max(need, tc - t0 + 0.5)
         if b.get("wait") == "key":
-            events.append((t0, "face", None))
-            need = max(need, 4.0)           # Rémi's pause: the preview turns the duck to face Reachy
+            need = max(need, 0.5)           # Rémi's ENTER: in the preview the duck already faces Reachy (turned during the lament)
         say = 0.0
         if b.get("text"):
             wav = scene / "audio" / f"{b['id']}.wav"
