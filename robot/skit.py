@@ -1,11 +1,21 @@
-"""Scene player. Runs ON the robot over `ssh -t` (see run_on_robot.sh).
+"""Scene player. Runs ON the Reachy Mini over `ssh -t` (see run_on_robot.sh).
 
-Usage: skit.py <scene_dir> [--start-delay S] [--from-beat K] [--no-wake] [--no-sleep]
-Setup first (load emotions, connect, motors on, wake-up move), then ENTER waits --start-delay
-and starts beat 0; ESC/q/Ctrl+C aborts at any point (motion + audio stop, robot goes back to
-sleep). Spoken beats need <scene_dir>/audio/<id>.wav.
+Usage: skit.py <scene_dir> [--start-delay S] [--from-beat K] [--no-wake] [--no-sleep] [--no-duck]
+Setup first (load emotions, connect, motors on, wake-up move, ping the duck), then ENTER waits
+--start-delay and starts beat 0; ESC/q/Ctrl+C aborts at any point (motion + audio stop, robot
+goes back to sleep, the duck's expression is stopped). Spoken beats need <scene_dir>/audio/<id>.wav.
+
+Two robots (episode 3): a beat may also carry ONE duck cue — `"duck": "excited"` (an emotion of
+the film build, see microduck/EMOTIONS.md), `"duck_skill": "ground_pick"`, `"duck_sound": "chirp"`
+or `"duck_move": [vx, vy, wz], "for": 1.5` — sent to the duck's pad daemon over TCP (duck_cue.py,
+`DUCK_CUE=host:port`). The duck's cue runs in parallel with the Reachy's line / emotions of the
+same beat, and the beat lasts at least as long as the duck needs (the daemon answers with the
+emotion's length). The gamepad stays alive between cues. `"wait": "key"` makes a beat wait for
+ENTER before it runs (for the moments Rémi pilots the duck by hand: standing it up, turning it).
 """
 import argparse, json, os, select, sys, termios, threading, time, tty
+
+from duck_cue import Duck, beat_cue
 
 from reachy_mini import ReachyMini
 from reachy_mini.motion.recorded_move import RecordedMoves
@@ -68,6 +78,8 @@ def main():
     ap.add_argument("--from-beat", type=int, default=0)
     ap.add_argument("--no-wake", action="store_true")
     ap.add_argument("--no-sleep", action="store_true")
+    ap.add_argument("--no-duck", action="store_true", help="ignore the duck cues (Reachy only)")
+    ap.add_argument("--dry-duck", action="store_true", help="print the duck cues instead of sending them")
     a = ap.parse_args()
     beats = json.load(open(os.path.join(a.scene_dir, "scene.json")))
     t0 = time.time()
@@ -75,6 +87,14 @@ def main():
     for b in beats:
         for n in b.get("emotions", []): moves.get(n)
     threading.Thread(target=key_listener, daemon=True).start()
+    duck = None
+    if not a.no_duck and any(k in b for b in beats for k in ("duck", "duck_skill", "duck_sound", "duck_move")):
+        duck = Duck(dry=a.dry_duck, log=say)
+        try:
+            duck.ping()
+        except OSError as e:
+            say(f"!!! the duck's cue port is not answering ({e}); running Reachy only. Set DUCK_CUE=host:port or --no-duck")
+            duck = None
     with ReachyMini() as mini:
         mini.enable_motors()
         if not a.no_wake:
@@ -93,24 +113,43 @@ def main():
             mini.enable_wobbling()
             for i, b in enumerate(beats):
                 if i < a.from_beat: continue
+                if b.get("wait") == "key":
+                    start_ev.clear()
+                    say(f">>> [{i}] {b['id']}: {b.get('note', 'ENTER when ready')} <<<")
+                    while not start_ev.is_set():
+                        isleep(0.05)
                 bt = time.time()
-                say(f"[{i}] {b['id']}: {b.get('emotions')} {'(speaks)' if b.get('text') else ''}")
+                cue = next((f"{k}={b[k]}" for k in ("duck", "duck_skill", "duck_sound", "duck_move") if k in b), "")
+                say(f"[{i}] {b['id']}: {b.get('emotions')} {'(speaks)' if b.get('text') else ''} {cue}")
                 isleep(b.get("pre", 0.0))
+                need = 0.0
+                if duck and cue:
+                    try:
+                        need = beat_cue(duck, b)
+                    except (OSError, RuntimeError) as e:
+                        say(f"!!! duck cue failed: {e}")
                 em.start(b.get("emotions", []))
                 if b.get("text"):
                     p = os.path.join(a.scene_dir, "audio", f"{b['id']}.wav")
                     mini.media.play_sound(os.path.abspath(p))
                     isleep(audio_duration_seconds(p) + b.get("tail", 0.3))
                 em.wait()
-                isleep(b.get("hold", 0.0) - (time.time() - bt))
+                isleep(max(b.get("hold", 0.0), need) - (time.time() - bt))
                 isleep(b.get("gap", 0.0))
             say(f"end, lingering {LINGER_S}s (ESC to sleep now)"); isleep(LINGER_S)
         except Stopped:
             say("!!! stopping"); mini.cancel_move(); em.wait(timeout=2.0)
+            if duck:
+                try:
+                    duck.stop()
+                except (OSError, RuntimeError):
+                    pass
         finally:
             stop_ev.set(); mini.disable_wobbling()
             if not a.no_sleep:
                 say("going to sleep"); mini.goto_sleep(); mini.disable_motors()
+    if duck:
+        duck.close()
     say("done"); return 0
 
 
