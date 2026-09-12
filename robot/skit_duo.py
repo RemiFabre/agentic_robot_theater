@@ -226,6 +226,10 @@ def main():
     ap.add_argument("--timeline-out", default=None, help="write one JSON line per spoken line (id, wav, epoch start) for muxing")
     a = ap.parse_args()
     tl_out = open(a.timeline_out, "w") if a.timeline_out else None
+    # SIGTERM (and SIGINT when the shell ignored it for a background job) = the same clean stop as Ctrl+C
+    import signal
+    for sg in (signal.SIGTERM, signal.SIGINT):
+        signal.signal(sg, lambda *_: stop_ev.set())
     scene_dir = a.scene_dir
     beats = json.load(open(os.path.join(scene_dir, "scene.json")))
     from reachy_mini.motion.recorded_move import RecordedMoves

@@ -1,8 +1,8 @@
 # Two simulated Reachy Minis on the Mac (couple_fight)
 
 Written 2026-09-12 by the sim agent. Everything below was run on this Mac (macOS 15.6, MuJoCo 3.3, SDK venv
-`~/reachy_mini_apps/reachy_mini/.venv`). Nothing in the SDK checkout was edited; the GStreamer plugin
-`libgstpython.dylib` was NOT renamed.
+`~/reachy_mini_apps/reachy_mini/.venv`). Nothing in the SDK checkout or its venv was edited; the GStreamer plugin
+`libgstpython.dylib` was NOT renamed (not needed, see the media section).
 
 ## What runs
 
@@ -59,4 +59,55 @@ Measured loop rate: see the end of each player log (`loretta: loop N Hz ...`).
 - `robot/run_sim_duo.sh`, `robot/skit_duo.py`, `robot/fake_offsets.py` (placeholder offsets; the real ones from the
   wobbler harness were already on disk, so no placeholder was used or written), `robot/record_windows.py`,
   `robot/mux_lines.py`, `robot/record_duo.sh`.
-- `scenes/couple_fight/sim_v0.mp4`, `sim_v5.mp4` (proof recordings, see below).
+- `scenes/couple_fight/sim_v0.mp4`, `sim_v5.mp4`, `sim_v6.mp4` (proof recordings, about 1.1 MB each; `*.mp4` is
+  gitignored so they stay on disk only).
+
+## Daemon-side wobbler in sim (MEDIA=1), what was checked
+
+- `MEDIA=1 robot/run_sim_duo.sh` starts both daemons with the GStreamer media server. They booted and stayed up,
+  no `libgstpython.dylib` segfault in the mjpython process on this Mac (the plugin is still in place). Both bind
+  udp 5005 (udpsrc has reuse on) and the same camera socket; harmless for the scene, just do not trust the sim
+  cameras.
+- Is there an audio pipeline in sim on macOS: yes. The daemon opens `osxaudiosrc` / `osxaudiosink` on the default
+  devices (log: "No Reachy Mini Audio Sink card found ... using default audio sink"), so `play_sound` goes to the
+  Mac speakers. The SDK's `media_backend="local"` (what `--wobbler daemon` uses) does the same on the client side and
+  runs the v0 speech tapper there, sending `SetSpeechOffsetsCmd` to the daemon over the WebSocket. It only works
+  when the daemon reports `no_media: false`, hence MEDIA=1.
+- `skit_duo.py --wobbler daemon` ran for two beats without errors on the MEDIA=1 daemons (log
+  `/tmp/couple_fight_play_daemon.log`). UNVERIFIED: whether the head visibly wobbled and whether the sound came out
+  of the speakers (no recording was made, nobody was listening). To check: `MEDIA=1 robot/run_sim_duo.sh` (after a
+  stop), then `robot/record_duo.sh daemon` and look at the head during the lines. The v0 offsets recording shows what
+  the same tapper produces offline.
+- The offsets player (`--wobbler v0|v4|v5|v6`) also works against MEDIA=1 daemons: it connects with `no_media`,
+  which releases the daemon's media while it runs and re-acquires it at exit (full scene run, log
+  `/tmp/couple_fight_play_v5_media.log`).
+
+## Proof recordings
+
+`robot/record_duo.sh <ver>`: starts the player (`--start-delay 1.5`, `--timeline-out`), waits for its "setup done",
+records both windows for 24 s (beats late, please, lisa, coworker, hearts) with `record_windows.py`, then
+`mux_lines.py` puts the wavs under the video at the exact times the player started them. Real offset files were used
+(the wobbler agent's `audio/offsets/*.{v0,v4,v5,v6}.json`, hop 50 ms), no placeholder.
+Capture is 9 fps (CGWindowListCreateImage costs ~30 ms per window and the window server serialises it); the mux
+re-times the frames so the video plays at real speed. `screencapture -v` and ffmpeg avfoundation were not used:
+they capture the screen, where only one of the two windows is visible. Screen Recording permission is granted to the
+terminal (screencapture -x worked).
+Measured player loop: 96 Hz per robot over a 70 s scene, about 50 late ticks (3 WebSocket commands per tick per robot).
+
+## Left running
+
+The two MEDIA=1 daemons: loretta PID 89081 (port 8000), husband PID 89082 (port 8001), logs
+`/tmp/couple_fight_sim_loretta.log` and `/tmp/couple_fight_sim_husband.log`, PID files `/tmp/couple_fight_sim_*.pid`.
+Stop: `robot/run_sim_duo.sh stop`. Restart without media (the default): `robot/run_sim_duo.sh`.
+
+## Not done / decisions
+
+- Windows not moved side by side (no assistive access); drag one by hand, they are stacked at the same spot.
+- Stop keys: Ctrl+C in a terminal, or SIGTERM (a background job started with `&` from a script ignores SIGINT, so
+  use `kill -TERM`). ENTER-to-start was dropped; use `--start-delay`.
+- No `--wobbler daemon` recording. `robot/record_duo.sh daemon` is ready if wanted.
+- The robots do not turn toward each other (they are in two separate MuJoCo worlds); a `body_yaw` per beat still
+  works if the real shoot needs it (the moves' own body yaw is passed through).
+- Scratch venv for the recorder (pyobjc Quartz):
+  `/private/tmp/claude-501/-Users-remi-reachy-mini-apps-agentic-robot-theater/5d567a64-3ce8-4a0b-a381-82b6427026ef/scratchpad/qz`
+  (recreate anywhere with `uv venv qz && uv pip install --python qz/bin/python pyobjc-framework-Quartz`, `QZ=` env).
