@@ -81,3 +81,6 @@ Read this first. Everything is committed locally (this repo and the wobbler work
 - v6 on the real robot: untested. CM4 cost not measured (same FFT as v5 plus scalar ops).
 - The mp4 files are gitignored in this repo (as for episode 3), so the previews and sim recordings live on disk only.
 - The screen captures run at 9 fps (window-server bound): fine to judge the motion, not for publishing.
+- The renderer agent queued a re-render of `preview_v0.mp4` and `preview_v0_vs_v5.mp4` with its last fix (beat timing,
+  the newer renders are 66 s, the first v0 render 63 s). If a file looks half written when you open it, wait a few
+  minutes: `pgrep -fl render_duo.py` shows whether it is still running.
