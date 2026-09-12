@@ -1,6 +1,7 @@
 """Render every spoken beat of a scene to <scene_dir>/audio/<id>.wav (16 kHz mono, silences trimmed).
 
 Usage: uv run voice/render_lines.py scenes/<name> --voice <voice_id> [--only id1,id2] [--speed 1.0]
+Two characters: --voice loretta=<id>,husband=<id> picks the voice by the beat's `speaker` field.
 """
 import argparse, json, os, subprocess
 from elevenlabs.client import ElevenLabs
@@ -16,11 +17,13 @@ ap.add_argument("--only", default=""); ap.add_argument("--speed", type=float, de
 ap.add_argument("--model", default="eleven_v3"); ap.add_argument("--play", action="store_true")
 a = ap.parse_args()
 only = set(filter(None, a.only.split(",")))
+voices = dict(kv.split("=", 1) for kv in a.voice.split(",")) if "=" in a.voice else {}
 out_dir = os.path.join(a.scene_dir, "audio"); os.makedirs(out_dir, exist_ok=True)
 c = ElevenLabs()
 for b in json.load(open(os.path.join(a.scene_dir, "scene.json"))):
     if not b.get("text") or (only and b["id"] not in only): continue
-    audio = c.text_to_speech.convert(voice_id=a.voice, text=b["text"], model_id=a.model, output_format="mp3_44100_128",
+    voice = voices[b["speaker"]] if voices else a.voice
+    audio = c.text_to_speech.convert(voice_id=voice, text=b["text"], model_id=a.model, output_format="mp3_44100_128",
         voice_settings=VoiceSettings(stability=0.35, similarity_boost=0.8, style=0.6, speed=a.speed))
     raw = os.path.join(out_dir, f"{b['id']}_raw.mp3"); wav = os.path.join(out_dir, f"{b['id']}.wav")
     open(raw, "wb").write(b"".join(audio))
