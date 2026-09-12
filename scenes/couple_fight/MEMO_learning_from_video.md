@@ -4,7 +4,7 @@ Date: 2026-09-12. For Rémi Fabre. Feasibility study only, nothing was trained.
 
 ## Headline
 
-Feasible, and cheaper than it sounds. The head-pose sub-problem is tiny (3 angles at 20 Hz), the data exists under usable licences, and a streaming GRU of under 1 M parameters runs on the CM4 with room to spare. The real risks are not compute: they are licence hygiene, retargeting to a Stewart platform, and the fact that even the best academic systems still score barely above chance on "is this motion appropriate for this speech" (GENEA 2023). Supervised imitation plus a preference step on filmed A/B pairs is the sensible first target. Full RL is optional, not required.
+Feasible and cheap. The head-pose sub-problem is tiny (3 angles at 20 Hz), usable data exists, and a streaming GRU under 1 M parameters runs on the CM4 with margin. The risks are licence hygiene, retargeting to a Stewart platform, and the fact that the best academic systems still score barely above chance on "is this motion appropriate for this speech" (GENEA 2023). Supervised imitation plus a preference step on filmed A/B pairs is the sensible first target. Full RL is optional.
 
 ## 1. Datasets with speech and head motion
 
@@ -20,27 +20,27 @@ Feasible, and cheaper than it sounds. The head-pose sub-problem is tiny (3 angle
 | TalkVid (2025) | 1244 h, 7729 speakers | none | in the wild | CC BY-NC 4.0 |
 | MEAD, VOCASET | 60 acted speakers; 0.5 h | MEAD none, VOCASET yes | acted | MEAD research agreement, too small |
 
-Practical reading: BEAT2 gives clean, explicit head rotations and covers emotions, which matches the "emotional colouring" idea. HDTF plus TalkingHead-1KH give in-the-wild dynamics under CC BY. NC-licensed sets (PATS, TalkVid) are fine for a study, not for a model shipped in the product. I could not verify the exact BEAT2 dataset licence beyond the HF tag; the original BEAT was non-commercial, so check before shipping.
+Reading: BEAT2 gives explicit head rotations with emotion labels, which fits the "emotional colouring" idea. HDTF and TalkingHead-1KH give in-the-wild dynamics under CC BY. NC sets (PATS, TalkVid) suit a study, not a shipped model. The BEAT2 licence is only the HF tag; the original BEAT was non-commercial, check before shipping.
 
 ## 2. Extracting head pose from video yourself
 
-- MediaPipe Face Landmarker (Apache-2.0) returns a 4x4 head transformation matrix per frame, about 100 fps on a laptop CPU. One hour of 25 fps video is about 15 to 20 CPU-minutes. Accuracy in degrees is not published; expect a few degrees of bias and frame jitter, which matter less than dynamics for our use: we need velocities and onset timing, not absolute angles.
-- 3DDFA_V2 reports 4.3 degrees mean error on AFLW2000-3D; 3DDFA-V3 (CVPR 2024) ships a MobileNet-V3 fast variant. OpenFace 2 was measured at 14.1 degrees on BIWI in one benchmark: avoid.
-- DECA and EMOCA (FLAME fitters) are non-commercial licences. FLAME 2023 itself is CC BY 4.0. Prefer MediaPipe or 3DDFA for a product pipeline.
-- Rights: YouTube's ToS position is contested (Google says the ToS allows training, its CEO said the opposite to OpenAI, creators are suing Snap). In the EU, DSM directive art. 4 allows text and data mining by companies unless the rightholder opted out in machine-readable form; art. 3 is for research organisations. Safest path: restrict to CC BY subsets (TalkingHead-1KH, HDTF) plus mocap (BEAT2), keep the video URLs and licence tags with the extracted poses.
+- MediaPipe Face Landmarker (Apache-2.0) returns a 4x4 head transform per frame at about 100 fps on a laptop CPU: one hour of 25 fps video costs 15 to 20 CPU-minutes. Its accuracy in degrees is not published; expect a few degrees of bias and jitter. That is acceptable: we need velocities and onset timing, not absolute angles.
+- 3DDFA_V2 reports 4.3 degrees mean error on AFLW2000-3D; 3DDFA-V3 (CVPR 2024) has a MobileNet-V3 fast variant. OpenFace 2 measured 14.1 degrees on BIWI in one benchmark: avoid.
+- DECA and EMOCA are non-commercial licences; FLAME 2023 is CC BY 4.0. Prefer MediaPipe or 3DDFA for a product pipeline.
+- Rights: YouTube's ToS position is contested (Google says the ToS allows training, its CEO told OpenAI the opposite, creators are suing Snap). In the EU, DSM art. 4 allows data mining by companies unless the rightholder opted out in machine-readable form. Safest path: CC BY subsets (TalkingHead-1KH, HDTF) plus mocap (BEAT2), and keep URL and licence tags next to each extracted pose file.
 
 ## 3. Prior work on head motion from speech
 
-- Small models already work: Ding et al. 2015 used a BLSTM on 26-D log Mel filterbanks; Busso reported sentence-level correlation of about 0.8 between MFCCs and head motion. Audio2Head (2021) uses a motion-aware RNN for 6-D head pose. SadTalker's PoseVAE is a conditional VAE for pose style. DiffPoseTalk (2024) is a diffusion model with a style encoder trained on TFHP. Learning to Listen uses a VQ-VAE for listener head motion. EMAGE covers full-body on BEAT2.
-- VASA-1, EMO, Hallo, Teller generate video with diffusion; the head-motion part lives in their latent, far too heavy for the CM4 and not separable without their code.
-- GENEA 2023 (12 systems): a few systems match mocap on human-likeness, but appropriateness to the speech stays in a narrow band slightly above chance; FGD was the best objective proxy (Kendall tau around -0.5).
-- CM4 budget: the current v4 already runs an FFT every 50 ms at 0.1 % of a core. A causal GRU or TCN with 0.3 to 1 M parameters on the same 20 Hz features costs well under 1 ms per step in ONNX on the CM4 (estimate, not measured). Note that in the skit pipeline the audio is TTS known in advance, so lookahead is free offline; only the live streaming case is bound to 50 ms.
+- Small models work: Ding et al. 2015 used a BLSTM on 26-D log Mel filterbanks; Busso reported a sentence-level correlation of about 0.8 between MFCCs and head motion. Audio2Head (2021) is an RNN for 6-D head pose. SadTalker's PoseVAE is a conditional VAE for pose style. DiffPoseTalk (2024) is diffusion with a style encoder, trained on TFHP. Learning to Listen uses a VQ-VAE for listener heads. EMAGE does full body on BEAT2.
+- VASA-1, EMO, Hallo, Teller are video diffusion models; their head motion lives in a latent, far too heavy for the CM4 and not separable.
+- GENEA 2023 (12 systems): a few match mocap on human-likeness, but appropriateness to the speech stays slightly above chance; FGD was the best objective proxy (Kendall tau around -0.5).
+- CM4 budget: v4 already runs an FFT every 50 ms at 0.1 % of a core. A causal GRU or TCN of 0.3 to 1 M parameters on the same 20 Hz features should cost under 1 ms per step in ONNX (estimate, not measured). In the skit pipeline the TTS audio is known in advance, so lookahead is free; only live chat is bound to 50 ms.
 
 ## 4. Transfer to Reachy Mini
 
-- Workspace: pitch and roll clamp at ±40 degrees, head yaw ±180 with body-head difference under ±65. Conversational head motion is mostly inside ±15 degrees, so amplitude fits; the wobbler already emits pitch/yaw/roll plus mm translations at 20 Hz. Retarget with a per-axis gain, a velocity clamp (Placo IK limits joints at 13 rad/s) and a low-pass to hide Stewart coupling. MuJoCo sim checks reachability and saturation before any robot runs.
-- Relevant robotics precedents: an imitation pipeline giving NAO human-like head motion (arXiv 2407.11915) and PhysDrift (June 2026), which shows naive retargeting loses diversity and sync and proposes IK-based retargeting that keeps prosody alignment.
-- Imitation then RL here means: supervised model first, then optimise the lab's own metrics (stillness_in_silence, onset_alignment), FGD against human pose statistics, and a preference model fitted on the community A/B votes. RL adds value only for non-differentiable rewards and robot-native constraints; the risk is reward hacking (twitching at every onset). A DPO-style preference step on pairs of rendered clips is likely enough and far simpler.
+- Workspace: pitch and roll clamp at ±40 degrees, head yaw ±180 with body-head difference under ±65. Conversational head motion mostly stays inside ±15 degrees, so amplitude fits; the wobbler already emits pitch/yaw/roll plus mm translations at 20 Hz. Retarget with per-axis gains, a velocity clamp (Placo IK limits joints at 13 rad/s) and a low-pass for Stewart coupling. MuJoCo checks reachability and saturation before any robot run.
+- Precedents: an imitation pipeline giving NAO human-like head motion (arXiv 2407.11915) and PhysDrift (June 2026), which shows naive retargeting loses diversity and sync and proposes IK-based retargeting that keeps prosody alignment.
+- Imitation then RL means: supervised model first, then optimise the lab metrics (stillness_in_silence, onset_alignment), FGD against human pose statistics, and a preference model fitted on community A/B votes. RL only pays for non-differentiable rewards and robot-native constraints, and it can reward-hack (twitch at every onset). A DPO-style step on pairs of rendered clips is likely enough and far simpler.
 
 ## 5. Three plans
 
