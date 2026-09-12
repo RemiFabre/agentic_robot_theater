@@ -460,7 +460,7 @@ def mix(silent, out, lines):
             cmd += ["-i", str(wav)]
             ms = int(round(ta * 1000))
             parts.append(f"[{i + 1}:a]aresample=48000,adelay={ms}|{ms}[s{i}]")
-        parts.append("".join(f"[s{i}]" for i in range(len(lines))) + f"amix=inputs={len(lines)}:normalize=0[a]")
+        parts.append("".join(f"[s{i}]" for i in range(len(lines))) + f"amix=inputs={len(lines)}:normalize=0,apad[a]")   # apad: the video length wins over -shortest
         cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k",
                 "-shortest", str(out)]
     subprocess.run(cmd, check=True)
