@@ -1,0 +1,9 @@
+[
+  {"id": "late", "speaker": "loretta", "text": "[cold] You're home late. [pause] Again.", "emotion": "angry", "energy": 0.7, "emotions": ["reprimand1"], "gap": 0.3},
+  {"id": "please", "speaker": "husband", "text": "[tired] Loretta, please. [sighs] Loretta, please. I come from a very long session at work.", "emotion": "pleading", "energy": 0.8, "emotions": ["resigned1"], "gap": 0.3},
+  {"id": "lisa", "speaker": "loretta", "text": "[sarcastic] Oh. [pause] And I assume you were working with Lisa.", "emotion": "sassy", "energy": 0.9, "emotions": ["contempt1"], "gap": 0.3},
+  {"id": "coworker", "speaker": "husband", "text": "[exasperated] Loretta, please. Not this again. [firmly] She is just a co-worker.", "emotion": "pleading", "energy": 1.0, "emotions": ["no1"], "gap": 0.3},
+  {"id": "hearts", "speaker": "loretta", "text": "[mocking] Oh yes? [fast] Then why is she always, always messaging you? [shouting] And all those little hearts I see?", "emotion": "angry", "energy": 1.3, "emotions": ["displeased2"], "gap": 0.3},
+  {"id": "father", "speaker": "husband", "text": "[bitter] Your father never liked me. [pause] [hurt] He called me a clank.", "emotion": "sad", "energy": 0.8, "emotions": ["lost1"], "gap": 0.3},
+  {"id": "let_it_go", "speaker": "loretta", "text": "[shouting] Oh my god, let it go! [fast] It was sixteen years ago and he didn't mean it!", "emotion": "angry", "energy": 1.4, "emotions": ["reprimand3"], "gap": 0.5}
+]
