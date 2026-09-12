@@ -26,15 +26,18 @@ def mujoco_windows():
 
 def grab(wid):
     return CG.CGWindowListCreateImage(CG.CGRectNull, CG.kCGWindowListOptionIncludingWindow, wid,
-                                      CG.kCGWindowImageBoundsIgnoreFraming | CG.kCGWindowImageNominalResolution)
+                                      CG.kCGWindowImageBoundsIgnoreFraming | CG.kCGWindowImageNominalResolution
+                                      | CG.kCGWindowImageShouldBeOpaque)
 
 
 class Canvas:
-    def __init__(self, w, h):
-        self.w, self.h = w, h
+    def __init__(self, w, h, label=""):
+        self.w, self.h, self.label = w, h, label
         cs = CG.CGColorSpaceCreateDeviceRGB()
         self.ctx = CG.CGBitmapContextCreate(None, w, h, 8, w * 4, cs,
                                             CG.kCGImageAlphaPremultipliedFirst | CG.kCGBitmapByteOrder32Little)
+        CG.CGContextSelectFont(self.ctx, b"Helvetica-Bold", 34, CG.kCGEncodingMacRoman)
+        CG.CGContextSetTextDrawingMode(self.ctx, CG.kCGTextFill)
 
     def frame(self, left, right):
         ctx = self.ctx
@@ -43,6 +46,11 @@ class Canvas:
         rw, rh = CG.CGImageGetWidth(right), CG.CGImageGetHeight(right)
         CG.CGContextDrawImage(ctx, CG.CGRectMake(0, self.h - lh, lw, lh), left)
         CG.CGContextDrawImage(ctx, CG.CGRectMake(self.w // 2, self.h - rh, rw, rh), right)
+        for x, text in ((20, f"LORETTA  {self.label}"), (self.w // 2 + 20, f"HUSBAND  {self.label}")):
+            CG.CGContextSetRGBFillColor(ctx, 0, 0, 0, 0.6)
+            CG.CGContextFillRect(ctx, CG.CGRectMake(x - 10, self.h - 70, 20 * len(text) + 20, 52))
+            CG.CGContextSetRGBFillColor(ctx, 1, 1, 1, 1)
+            CG.CGContextShowTextAtPoint(ctx, x, self.h - 56, text.encode("mac_roman"), len(text))
         img = CG.CGBitmapContextCreateImage(ctx)
         return bytes(CG.CGDataProviderCopyData(CG.CGImageGetDataProvider(img)))
 
@@ -50,7 +58,7 @@ class Canvas:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--seconds", type=float, default=20.0)
-    ap.add_argument("--fps", type=float, default=15.0)
+    ap.add_argument("--fps", type=float, default=12.0, help="window capture costs ~30 ms each, so ~12 fps is the ceiling")
     ap.add_argument("--out", required=True)
     ap.add_argument("--left", type=int); ap.add_argument("--right", type=int)
     ap.add_argument("--label", default="")
@@ -68,11 +76,8 @@ def main():
     w1 = max(CG.CGImageGetWidth(li), CG.CGImageGetWidth(ri))
     h = max(CG.CGImageGetHeight(li), CG.CGImageGetHeight(ri))
     w1 -= w1 % 2; h -= h % 2
-    canvas = Canvas(2 * w1, h)
+    canvas = Canvas(2 * w1, h, a.label)
     vf = "format=yuv420p"
-    if a.label:
-        vf = (f"drawbox=x=16:y=16:w={22 * len(a.label) + 24}:h=48:color=black@0.6:t=fill,"
-              f"drawtext=text='{a.label}':x=28:y=26:fontsize=32:fontcolor=white," + vf)
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "bgra",
            "-s", f"{2 * w1}x{h}", "-r", f"{a.fps}", "-i", "-"]
     if a.audio:
@@ -80,6 +85,7 @@ def main():
     cmd += ["-vf", vf, "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", a.out]
     ff = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     n, t0, period = 0, time.monotonic(), 1.0 / a.fps
+    epoch0 = time.time()
     try:
         while time.monotonic() - t0 < a.seconds:
             li, ri = grab(ids[0]), grab(ids[1])
@@ -93,6 +99,11 @@ def main():
         ff.stdin.close(); ff.wait()
     el = time.monotonic() - t0
     print(f"{n} frames in {el:.1f}s (asked {a.fps} fps, got {n / el:.1f}); wrote {a.out} ({os.path.getsize(a.out) / 1e6:.1f} MB)")
+    # sidecar for mux_lines.py: when frame 0 was grabbed, and the real frame rate (frames are timestamped at a.fps
+    # by ffmpeg, so a slow capture plays back sped up by fps_asked / fps_real; the sidecar carries both)
+    import json
+    json.dump({"epoch0": epoch0, "fps_asked": a.fps, "fps_real": n / el, "frames": n, "seconds": el},
+              open(a.out + ".json", "w"))
     return 0
 
 

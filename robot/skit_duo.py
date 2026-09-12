@@ -223,7 +223,9 @@ def main():
     ap.add_argument("--no-wake", action="store_true")
     ap.add_argument("--no-listener", action="store_true", help="ignore listener_emotions")
     ap.add_argument("--audio-latency", type=float, default=AFPLAY_LATENCY_S)
+    ap.add_argument("--timeline-out", default=None, help="write one JSON line per spoken line (id, wav, epoch start) for muxing")
     a = ap.parse_args()
+    tl_out = open(a.timeline_out, "w") if a.timeline_out else None
     scene_dir = a.scene_dir
     beats = json.load(open(os.path.join(scene_dir, "scene.json")))
     from reachy_mini.motion.recorded_move import RecordedMoves
@@ -234,7 +236,9 @@ def main():
         timeline(beats, a, scene_dir, moves_dur)
         return 0
     use_daemon = a.wobbler == "daemon"
-    media = "default" if use_daemon else "no_media"
+    # "local" = the SDK's own GStreamer audio to the Mac speakers + SDK-side wobbler; the SDK still refuses it when the
+    # daemon reports no_media, so the daemons must run with media (MEDIA=1 robot/run_sim_duo.sh)
+    media = "local" if use_daemon else "no_media"
     minis = {"loretta": connect("loretta", a.loretta, media), "husband": connect("husband", a.husband, media)}
     compose = None if a.wobbler in ("daemon", "none") else make_compose()
     actors = {k: Actor(k, m, moves, compose) for k, m in minis.items()}
@@ -285,6 +289,8 @@ def main():
                     else:
                         pl = subprocess.Popen(["afplay", wav]); players.append(pl)
                         t_line = now() + a.audio_latency
+                    if tl_out:
+                        tl_out.write(json.dumps({"id": b["id"], "wav": wav, "epoch": time.time() - (now() - t_line)}) + "\n"); tl_out.flush()
                     if track is not None:
                         track.start(t_line); actors[sp].set_track(track)
                         log(f"  line {dur:.2f}s, offsets {os.path.basename(track.path)}"
