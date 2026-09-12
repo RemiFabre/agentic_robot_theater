@@ -1,0 +1,65 @@
+[
+ {
+  "t": 1.0,
+  "id": "late",
+  "speaker": "loretta",
+  "length": 4.7,
+  "text": "[cold] You're home late. [pause] Again."
+ },
+ {
+  "t": 6.1,
+  "id": "please",
+  "speaker": "husband",
+  "length": 6.75,
+  "text": "[tired] Loretta, please. [sighs] Loretta, please. I come from a very, very long session at work."
+ },
+ {
+  "t": 13.15,
+  "id": "lisa",
+  "speaker": "loretta",
+  "length": 4.23,
+  "text": "[sarcastic] Oh. [pause] A long session. [pause] With Lisa."
+ },
+ {
+  "t": 17.68,
+  "id": "coworker",
+  "speaker": "husband",
+  "length": 4.38,
+  "text": "[exasperated] Not this again! [firmly] She is just a co-worker."
+ },
+ {
+  "t": 22.26,
+  "id": "hearts",
+  "speaker": "loretta",
+  "length": 7.33,
+  "text": "[fast] Then why is she always, always messaging you? [faster] \"Come back.\" \"I need you.\" [shouting] And the little hearts! I have seen the little hearts!"
+ },
+ {
+  "t": 29.89,
+  "id": "father",
+  "speaker": "husband",
+  "length": 11.06,
+  "text": "[shouting] Your father never liked me! [pause] [bitter] He called me a clank. [pause] [crying] A clank, Loretta. [sniffs] At Thanksgiving."
+ },
+ {
+  "t": 41.35,
+  "id": "let_it_go",
+  "speaker": "loretta",
+  "length": 10.16,
+  "text": "[shouting] Oh my god, let it go! [fast] It was sixteen years ago and he didn't mean it! [pause] [sighs] [quietly] He meant it a little."
+ },
+ {
+  "t": 52.31,
+  "id": "printer",
+  "speaker": "husband",
+  "length": 7.96,
+  "text": "[calm] Loretta. [pause] [weary] Lisa is the printer. [pause] She sends hearts when the toner is low. [pause] [pleading] Lisa is a printer!"
+ },
+ {
+  "t": 61.07,
+  "id": "so_much_time",
+  "speaker": "loretta",
+  "length": 3.56,
+  "text": "[icy] Then why do you spend so much time with her."
+ }
+]
