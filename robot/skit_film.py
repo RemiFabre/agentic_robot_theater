@@ -308,6 +308,8 @@ def main():
     ap.add_argument("--husband", default="localhost:8000", help="the Lite: daemon on this Mac")
     ap.add_argument("--offsets", choices=["daemon", "local"], default="daemon", help="who composes the offsets")
     ap.add_argument("--audio-latency", type=float, default=0.10, help="s between play_sound and the first sample heard")
+    ap.add_argument("--lead-ms", type=float, default=200.0, help="motion lead in ms for the offsets modes: positive = the head "
+                    "moves earlier than the audio (compensates the motor and smoothing lag). Try 300 if still late, 100 if early")
     ap.add_argument("--from-beat", type=int, default=0)
     ap.add_argument("--until", default=None, help="stop before this beat id (tests)")
     ap.add_argument("--start-delay", type=float, default=0.0, help="s between ENTER and beat 0")
@@ -382,6 +384,7 @@ def main():
         for t in ths: t.start()
         for t in ths: t.join()
         say(f"setup done: motion={a.motion} wobbler={a.wobbler} offsets={a.offsets if use_offsets else '-'}"
+            f"{f' lead {a.lead_ms:.0f} ms' if use_offsets else ''}"
             f"{' NO AUDIO' if a.no_audio else ''}, {len(beats)} beats from {a.from_beat}")
         say(f">>> ENTER to start (beat {a.from_beat} after {a.start_delay:g}s), ESC to abort <<<")
         if a.auto_start:
@@ -425,7 +428,7 @@ def main():
                     speaker.mini.disable_wobbling()
                 if not a.no_audio:
                     speaker.play_sound(b["id"])
-                t_line = now() + a.audio_latency
+                t_line = now() + a.audio_latency - a.lead_ms / 1000.0
                 if track is not None:
                     track.start(t_line); speaker.set_track(track)
                 say(f"  line {dur:.2f}s{' + ' + os.path.basename(track.path) if track else ''}{' (off screen, no wobble)' if offscreen else ''}")
