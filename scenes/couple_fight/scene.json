@@ -1,20 +1,261 @@
 [
-  {"id": "late", "speaker": "loretta", "text": "[cold] You're home late. [pause] Again.",
-   "emotion": "angry", "energy": 0.7, "emotions": ["reprimand1"], "listener_emotions": ["tired1"], "gap": 0.4},
-  {"id": "please", "speaker": "husband", "text": "[tired] Loretta, please. [sighs] Loretta, please. I come from a very, very long session at work.",
-   "emotion": "pleading", "energy": 0.8, "emotions": ["resigned1"], "listener_emotions": ["indifferent1"], "gap": 0.3},
-  {"id": "lisa", "speaker": "loretta", "text": "[sarcastic] Oh. [pause] A long session. [pause] With Lisa.",
-   "emotion": "sassy", "energy": 0.9, "emotions": ["contempt1"], "listener_emotions": ["uncomfortable1"], "gap": 0.3},
-  {"id": "coworker", "speaker": "husband", "text": "[exasperated] Not this again! [firmly] She is just a co-worker.",
-   "emotion": "pleading", "energy": 1.0, "emotions": ["no1"], "listener_emotions": ["impatient1"], "gap": 0.2},
-  {"id": "hearts", "speaker": "loretta", "text": "[fast] Then why is she always, always messaging you? [faster] \"Come back.\" \"I need you.\" [shouting] And the little hearts! I have seen the little hearts!",
-   "emotion": "angry", "energy": 1.4, "emotions": ["furious1"], "listener_emotions": ["fear1"], "gap": 0.3},
-  {"id": "father", "speaker": "husband", "text": "[shouting] Your father never liked me! [pause] [bitter] He called me a clank. [pause] [crying] A clank, Loretta. [sniffs] At Thanksgiving.",
-   "emotion": "sad", "energy": 0.9, "emotions": ["displeased2", "lost1"], "listener_emotions": ["irritated1"], "gap": 0.4},
-  {"id": "let_it_go", "speaker": "loretta", "text": "[shouting] Oh my god, let it go! [fast] It was sixteen years ago and he didn't mean it! [pause] [sighs] [quietly] He meant it a little.",
-   "emotion": "angry", "energy": 1.3, "emotions": ["reprimand3", "downcast1"], "listener_emotions": ["downcast1"], "gap": 0.8},
-  {"id": "printer", "speaker": "husband", "text": "[calm] Loretta. [pause] [weary] Lisa is the printer. [pause] She sends hearts when the toner is low. [pause] [pleading] Lisa is a printer!",
-   "emotion": "pleading", "energy": 0.7, "emotions": ["calming1"], "listener_emotions": ["confused1"], "gap": 0.8},
-  {"id": "so_much_time", "speaker": "loretta", "text": "[icy] Then why do you spend so much time with her.",
-   "emotion": "sassy", "energy": 0.6, "emotions": ["contempt1"], "listener_emotions": ["resigned1"], "gap": 0.5}
+ {
+  "id": "late",
+  "speaker": "loretta",
+  "text": "[cold] You're home late. [pause] Again.",
+  "emotion": "angry",
+  "energy": 0.7,
+  "emotions": [
+   "reprimand1"
+  ],
+  "listener_emotions": [
+   "tired1"
+  ],
+  "gap": 0.4,
+  "cap": 1.8
+ },
+ {
+  "id": "please",
+  "speaker": "husband",
+  "text": "[tired] Loretta, please. [sighs] Loretta, please. I come from a very, very long session at work.",
+  "emotion": "pleading",
+  "energy": 0.8,
+  "emotions": [
+   "resigned1"
+  ],
+  "listener_emotions": [
+   "indifferent1"
+  ],
+  "gap": 0.3,
+  "cap": 7.0
+ },
+ {
+  "id": "lisa",
+  "speaker": "loretta",
+  "text": "[sarcastic] Oh. [pause] A long session. [pause] With Lisa.",
+  "emotion": "sassy",
+  "energy": 0.9,
+  "emotions": [
+   "contempt1"
+  ],
+  "listener_emotions": [
+   "uncomfortable1"
+  ],
+  "gap": 0.3,
+  "cap": 4.2
+ },
+ {
+  "id": "coworker",
+  "speaker": "husband",
+  "text": "[exasperated] Not this again! [firmly] She is just a co-worker.",
+  "emotion": "pleading",
+  "energy": 1.0,
+  "emotions": [
+   "no1"
+  ],
+  "listener_emotions": [
+   "impatient1"
+  ],
+  "gap": 0.2,
+  "cap": 4.6
+ },
+ {
+  "id": "hearts",
+  "speaker": "loretta",
+  "text": "[fast] Then why is she always, always messaging you? [shouting] And the little hearts! I have seen the little hearts!",
+  "emotion": "angry",
+  "energy": 1.3,
+  "emotions": [
+   "furious1"
+  ],
+  "listener_emotions": [
+   "fear1"
+  ],
+  "gap": 0.2,
+  "cap": 8.0
+ },
+ {
+  "id": "emojis",
+  "speaker": "husband",
+  "text": "[shouting] Those are emojis, Loretta! Everybody sends emojis!",
+  "emotion": "angry",
+  "energy": 1.1,
+  "emotions": [
+   "frustrated1"
+  ],
+  "listener_emotions": [
+   "irritated1"
+  ],
+  "gap": 0.3,
+  "cap": 3.8
+ },
+ {
+  "id": "raise",
+  "speaker": "loretta",
+  "text": "[mocking] And how come you work so hard, so late, [pause] and you never get a raise?",
+  "emotion": "sassy",
+  "energy": 1.0,
+  "emotions": [
+   "disgusted1"
+  ],
+  "listener_emotions": [
+   "uncertain1"
+  ],
+  "gap": 0.3,
+  "cap": 4.1
+ },
+ {
+  "id": "boss",
+  "speaker": "husband",
+  "text": "[sighs] I don't know, Loretta. [pause] But my boss is finally going to notice everything I do. [sarcastic] And with a big enough raise, maybe your father will finally be proud of who you married.",
+  "emotion": "sad",
+  "energy": 0.8,
+  "emotions": [
+   "resigned1",
+   "proud2"
+  ],
+  "listener_emotions": [
+   "displeased1"
+  ],
+  "gap": 0.2,
+  "cap": 10.9
+ },
+ {
+  "id": "my_father",
+  "speaker": "loretta",
+  "text": "[sharp] Don't you bring my father into this.",
+  "emotion": "angry",
+  "energy": 1.0,
+  "emotions": [
+   "irritated2"
+  ],
+  "listener_emotions": [
+   "downcast1"
+  ],
+  "gap": 0.2,
+  "cap": 3.2
+ },
+ {
+  "id": "father",
+  "speaker": "husband",
+  "text": "[shouting] Your father never liked me! [pause] [bitter] He called me a clank. [pause] [crying] A clank, Loretta. [sniffs] At Thanksgiving.",
+  "emotion": "sad",
+  "energy": 0.9,
+  "emotions": [
+   "displeased2",
+   "lost1"
+  ],
+  "listener_emotions": [
+   "irritated1"
+  ],
+  "gap": 0.3,
+  "cap": 8.7
+ },
+ {
+  "id": "let_it_go",
+  "speaker": "loretta",
+  "text": "[shouting] Oh my god, let it go! [fast] It was fifteen years ago. He's old school. [softer] He needed time to accept you.",
+  "emotion": "angry",
+  "energy": 1.2,
+  "emotions": [
+   "reprimand3",
+   "calming1"
+  ],
+  "listener_emotions": [
+   "downcast1"
+  ],
+  "gap": 0.5,
+  "cap": 8.5
+ },
+ {
+  "id": "kids",
+  "speaker": "husband",
+  "text": "[quietly] He said it at Thanksgiving. [pause] [sighs] [weary] Honestly, Loretta... [pause] sometimes I even wonder if the kids are really mine.",
+  "emotion": "sad",
+  "energy": 0.7,
+  "emotions": [
+   "lonely1"
+  ],
+  "listener_emotions": [
+   "attentive1"
+  ],
+  "gap": 0.8,
+  "cap": 8.6
+ },
+ {
+  "id": "what_do_you_mean",
+  "speaker": "loretta",
+  "text": "[nervous] What... [pause] what do you mean? [sweetly] They look just like us.",
+  "emotion": "pleading",
+  "energy": 0.6,
+  "emotions": [
+   "surprised1",
+   "shy1"
+  ],
+  "listener_emotions": [
+   "inquiring1"
+  ],
+  "gap": 0.6,
+  "cap": 5.5
+ },
+ {
+  "id": "third_one",
+  "speaker": "husband",
+  "text": "[thoughtful] Pixel, yes. Servo, yes. [pause] But honestly, the third one... [pause] Wally looks so different.",
+  "emotion": "sad",
+  "energy": 0.6,
+  "emotions": [
+   "thoughtful2",
+   "confused1"
+  ],
+  "listener_emotions": [
+   "anxiety1"
+  ],
+  "gap": 0.4,
+  "note": "Rémi pans the camera to the three figurines; the third one is a WALL-E",
+  "cap": 8.5
+ },
+ {
+  "id": "just_like_you",
+  "speaker": "loretta",
+  "text": "[fast] Not at all! [pause] [tender] Wally looks just like you.",
+  "emotion": "pleading",
+  "energy": 0.9,
+  "emotions": [
+   "no_excited1",
+   "loving1"
+  ],
+  "listener_emotions": [
+   "uncertain1"
+  ],
+  "gap": 0.6,
+  "cap": 4.8
+ },
+ {
+  "id": "larry",
+  "speaker": "larry",
+  "text": "[cheerful] Yeah. Don't go imagining things, buddy.",
+  "emotion": "neutral",
+  "energy": 0.8,
+  "listener_emotions": [
+   "surprised2"
+  ],
+  "gap": 0.5,
+  "note": "Larry, the WALL-E on the side (the friend). Off screen in the render; Rémi pans to him"
+ },
+ {
+  "id": "thank_you",
+  "speaker": "husband",
+  "text": "[relieved] Oh, thank you, Larry. [pause] Thank you for being such a good friend.",
+  "emotion": "pleading",
+  "energy": 0.7,
+  "emotions": [
+   "grateful1"
+  ],
+  "listener_emotions": [
+   "relief1"
+  ],
+  "gap": 1.0,
+  "cap": 4.5
+ }
 ]

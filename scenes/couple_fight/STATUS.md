@@ -1,4 +1,25 @@
-# STATUS (couple_fight), 2026-09-12, end of the first hour
+# STATUS (couple_fight)
+
+## 2026-09-20: take 4, Rémi's ending (kids, the WALL-E friend), new Loretta voice
+
+Read `script_v4.md` for the text and my note on the turn. Rendered and staged in `scene.json` (17 beats, about 100 s).
+- Video (offscreen MuJoCo render, both robots, wobbler v6 on the heads, lines synced): `take4_v6.mp4`, and
+  `take4_v5_vs_v6.mp4` (side by side). Larry is off screen in the render (caption only), as he will be on the side
+  in the film. Nothing was played on the Mac.
+- Audio only: `audio/scene_mix.wav` (whole take, 100 s); the lines are `audio/<id>.wav`.
+- Voice: Loretta is a new design, C2 (lower, warmer, dry, not shrill), saved as `6UPiLePyL7dZLvH5zq4j`; the old A1 was
+  deleted (Rémi: too annoying). The husband is unchanged (James, English Butler); his `please`, `coworker` and `father`
+  takes are reused from take 3 (the clank at Thanksgiving delivery he liked). Larry is the library voice Retro Robot.
+- Kids' names: Pixel, Servo and Wally (the third one carries the friend's name, a second-layer joke). Change freely.
+- Pacing: every beat is capped just after its line (`cap`), the emotional ones get 1 to 1.5 s of air (kids,
+  what_do_you_mean, let_it_go, just_like_you).
+- Quota: 1085 ElevenLabs characters left until 2026-10-02 (take 4 cost 852). Enough for three or four retakes of lines.
+- Chosen path: offscreen render, not the live sim. It gave full-length, exactly synced videos last time; the live sim
+  needs the two windows dragged apart and captures at 9 fps. `robot/skit_duo.py` still runs take 4 live if wanted
+  (it has no puppet for Larry either: his line just plays).
+- Take 3 audio and offsets are kept in `audio_take3/`.
+
+# 2026-09-12: end of the first hour (take 3)
 
 Read this first. Everything is committed locally (this repo and the wobbler worktree), nothing pushed.
 

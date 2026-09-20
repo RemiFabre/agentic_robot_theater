@@ -44,6 +44,10 @@ ACTORS = {
     "loretta": dict(x=-0.26, y=0.0, yaw=-FACE_TURN, label="Loretta", color=(255, 150, 120)),
     "husband": dict(x=0.26, y=0.0, yaw=math.pi + FACE_TURN, label="Husband", color=(140, 200, 255)),
 }
+# Off-screen voices (no puppet): the line plays, the caption shows the name, both robots listen.
+OFFSCREEN = {
+    "larry": dict(label="Larry", color=(255, 225, 120)),
+}
 CAMERA = dict(lookat=[0.0, 0.0, 0.15], distance=0.82, azimuth=90, elevation=-8)
 TAU_MOVE, TAU_REST = 0.06, 0.5        # pose easing: tracking a recorded move / returning to neutral
 
@@ -286,7 +290,7 @@ def build_timeline(scene, beats, versions, until=None, start_delay=1.0, fake=Fal
             break
         t0 = t + float(b.get("pre", 0.0))
         spk = b.get("speaker", "loretta")
-        other = "husband" if spk == "loretta" else "loretta"
+        listeners = [a for a in ACTORS if a != spk]     # an off-screen speaker: both robots listen
         need = 0.0
         if b.get("text"):
             wav = scene / "audio" / f"{b['id']}.wav"
@@ -311,7 +315,8 @@ def build_timeline(scene, beats, versions, until=None, start_delay=1.0, fake=Fal
                 print(f"!! {b['id']}: no wav ({wav}), silent beat of 2.5 s")
                 need = max(need, 2.5)
         cap = float(b.get("cap", EMOTION_CAP_S))
-        for actor, key in ((spk, "emotions"), (other, "listener_emotions")):
+        pairs = ([(spk, "emotions")] if spk in ACTORS else []) + [(l, "listener_emotions") for l in listeners]
+        for actor, key in pairs:
             tc = t0
             for name in b.get(key) or []:
                 mv = load_move(name)
@@ -386,7 +391,7 @@ def overlay(img, cam, puppets, version, tt, line, breathing_only):
     dr.text((W - 90, 18), f"{tt:5.1f} s", font=font(FONT, 20), fill=(255, 255, 255, 200))
     if line is not None:
         spk, text = line
-        a = ACTORS[spk]
+        a = ACTORS.get(spk) or OFFSCREEN[spk]
         lines = wrap(text, 72)[:3]
         band = 26 + 34 * len(lines) + 26
         dr.rectangle([0, H - band, W, H], fill=(0, 0, 0, 165))
@@ -431,7 +436,7 @@ def frame_pose(tt, moves, lines, version):
         tr = offs.get(version)
         if tr is not None and ts <= tt < ts + wl:
             s = tr.sample(tt - ts)
-            if s is not None:
+            if s is not None and spk in out:
                 out[spk][1] = s[:6]
     return out, caption
 
