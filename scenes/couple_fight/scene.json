@@ -17,7 +17,7 @@
  {
   "id": "please",
   "speaker": "husband",
-  "text": "[tired] Loretta, please. [sighs] Loretta, please. I come from a very, very long session at work.",
+  "text": "[tired] Loretta, please. [sighs] I come from a very long day at work.",
   "emotion": "pleading",
   "energy": 0.8,
   "emotions": [
@@ -27,12 +27,12 @@
    "indifferent1"
   ],
   "gap": 0.3,
-  "cap": 7.0
+  "cap": 4.9
  },
  {
   "id": "lisa",
   "speaker": "loretta",
-  "text": "[sarcastic] Oh. [pause] A long session. [pause] With Lisa.",
+  "text": "[sarcastic] Oh. [pause] A long day. [pause] With Lisa.",
   "emotion": "sassy",
   "energy": 0.9,
   "emotions": [
@@ -62,7 +62,7 @@
  {
   "id": "hearts",
   "speaker": "loretta",
-  "text": "[fast] Then why is she always, always messaging you? [shouting] And the little hearts! I have seen the little hearts!",
+  "text": "[fast] Then why is she always messaging you? [shouting] And always adding those little hearts under your messages!",
   "emotion": "angry",
   "energy": 1.3,
   "emotions": [
@@ -72,7 +72,7 @@
    "fear1"
   ],
   "gap": 0.2,
-  "cap": 8.0
+  "cap": 5.4
  },
  {
   "id": "emojis",
@@ -107,18 +107,19 @@
  {
   "id": "boss",
   "speaker": "husband",
-  "text": "[sighs] I don't know, Loretta. [pause] But my boss is finally going to notice everything I do. [sarcastic] And with a big enough raise, maybe your father will finally be proud of who you married.",
-  "emotion": "sad",
-  "energy": 0.8,
+  "text": "[sighs] I don't know, Loretta. [pause] But here's what I hope will happen. [hopeful] My boss will finally notice everything I do. And he'll give me a raise. [sarcastic] A raise so big, that maybe your father will finally be proud of who you married.",
+  "emotion": "sassy",
+  "energy": 1.2,
   "emotions": [
    "resigned1",
-   "proud2"
+   "enthusiastic1",
+   "contempt1"
   ],
   "listener_emotions": [
    "displeased1"
   ],
   "gap": 0.2,
-  "cap": 10.9
+  "cap": 16.1
  },
  {
   "id": "my_father",
@@ -154,7 +155,7 @@
  {
   "id": "let_it_go",
   "speaker": "loretta",
-  "text": "[shouting] Oh my god, let it go! [fast] It was fifteen years ago. He's old school. [softer] He needed time to accept you.",
+  "text": "[shouting] Oh my god, let it go! [fast] It was fifteen years ago. He's old school, and you and I have always looked so different. [softer] He needed time to accept you.",
   "emotion": "angry",
   "energy": 1.2,
   "emotions": [
@@ -165,12 +166,12 @@
    "downcast1"
   ],
   "gap": 0.5,
-  "cap": 8.5
+  "cap": 11.7
  },
  {
   "id": "kids",
   "speaker": "husband",
-  "text": "[quietly] He said it at Thanksgiving. [pause] [sighs] [weary] Honestly, Loretta... [pause] sometimes I even wonder if the kids are really mine.",
+  "text": "[sighs] [weary] But honestly, Loretta... [pause] sometimes I even wonder if the kids are really mine.",
   "emotion": "sad",
   "energy": 0.7,
   "emotions": [
@@ -180,12 +181,12 @@
    "attentive1"
   ],
   "gap": 0.8,
-  "cap": 8.6
+  "cap": 7.2
  },
  {
   "id": "what_do_you_mean",
   "speaker": "loretta",
-  "text": "[nervous] What... [pause] what do you mean? [sweetly] They look just like us.",
+  "text": "[nervous] Whaaat? [pause] What do you mean? [sweetly] They look just like us.",
   "emotion": "pleading",
   "energy": 0.6,
   "emotions": [
@@ -196,7 +197,7 @@
    "inquiring1"
   ],
   "gap": 0.6,
-  "cap": 5.5
+  "cap": 5.9
  },
  {
   "id": "third_one",

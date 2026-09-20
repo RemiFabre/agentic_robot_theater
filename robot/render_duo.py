@@ -386,8 +386,9 @@ def overlay(img, cam, puppets, version, tt, line, breathing_only):
         f = font(FONT_BOLD, 22)
         w = dr.textlength(a["label"], font=f)
         dr.text((x - w / 2, y - 12), a["label"], font=f, fill=a["color"] + (255,), stroke_width=2, stroke_fill=(0, 0, 0, 200))
-    dr.rounded_rectangle([12, 12, 12 + 250, 12 + 40], radius=8, fill=(0, 0, 0, 150))
-    dr.text((22, 18), f"wobbler {version}", font=font(FONT_BOLD, 24), fill=(255, 255, 255, 255))
+    label = f"wobbler {version}"
+    dr.rounded_rectangle([12, 12, 12 + max(250, int(dr.textlength(label, font=font(FONT_BOLD, 24))) + 22), 12 + 40], radius=8, fill=(0, 0, 0, 150))
+    dr.text((22, 18), label, font=font(FONT_BOLD, 24), fill=(255, 255, 255, 255))
     dr.text((W - 90, 18), f"{tt:5.1f} s", font=font(FONT, 20), fill=(255, 255, 255, 200))
     if line is not None:
         spk, text = line
@@ -441,7 +442,7 @@ def frame_pose(tt, moves, lines, version):
     return out, caption
 
 
-def render_frame(r, m, d, cam, puppets, states, tt, dt, moves, lines, version):
+def render_frame(r, m, d, cam, puppets, states, tt, dt, moves, lines, version, label=None):
     poses, caption = frame_pose(tt, moves, lines, version)
     for actor, pup in puppets.items():
         mv, wob = poses[actor]
@@ -451,7 +452,7 @@ def render_frame(r, m, d, cam, puppets, states, tt, dt, moves, lines, version):
     mujoco.mj_forward(m, d)
     r.update_scene(d, camera=cam.cam)
     img = Image.fromarray(r.render())
-    return overlay(img, cam, puppets, version, tt, caption, False)
+    return overlay(img, cam, puppets, label or version, tt, caption, False)
 
 
 def mix(silent, out, lines):
@@ -477,6 +478,7 @@ def main():
     ap.add_argument("scene_dir")
     ap.add_argument("--wobbler", default="v5", help="offsets version to use (audio/offsets/<id>.<version>.json)")
     ap.add_argument("--side-by-side", default=None, help="two versions, e.g. v0,v5: both rendered, left/right in one video")
+    ap.add_argument("--stack", action="store_true", help="two panes stacked: top = wobbler only (no recorded moves), bottom = wobbler + emotions")
     ap.add_argument("--out", default=None)
     ap.add_argument("--until", default=None, help="stop before this beat id")
     ap.add_argument("--start-delay", type=float, default=1.0)
@@ -488,7 +490,7 @@ def main():
     scene = Path(a.scene_dir)
     beats = json.load(open(scene / "scene.json"))
     versions = a.side_by_side.split(",") if a.side_by_side else [a.wobbler]
-    tag = "_vs_".join(versions)
+    tag = "_vs_".join(versions) + ("_stack" if a.stack else "")
     out = Path(a.out) if a.out else scene / (f"preview_{tag}.mp4" if a.still is None else "preview_still.png")
 
     total, lines, moves, rows = build_timeline(scene, beats, versions, a.until, a.start_delay, a.fake_offsets, a.audio_fallback)
@@ -501,16 +503,28 @@ def main():
     r = mujoco.Renderer(m, SIZE[1], SIZE[0])
     dt = 1.0 / FPS
 
+    # A pass = (key, offsets version, moves, label). --stack: the same version twice, without and with the recorded moves.
+    if a.stack:
+        v = versions[0]
+        passes = [("only", v, {ac: [] for ac in ACTORS}, f"{v} only"), ("emo", v, moves, f"{v} + emotions")]
+    else:
+        passes = [(v, v, moves, f"{v}") for v in versions]
+
     def render_all(tt, states):
-        imgs = [render_frame(r, m, d, cam, puppets, states[v], tt, dt, moves, lines, v) for v in versions]
+        imgs = [render_frame(r, m, d, cam, puppets, states[key], tt, dt, mv, lines, v, label) for (key, v, mv, label) in passes]
         if len(imgs) == 1:
             return imgs[0]
+        if a.stack:
+            canvas = Image.new("RGB", (SIZE[0], SIZE[1] * len(imgs)))
+            for i, im in enumerate(imgs):
+                canvas.paste(im, (0, i * SIZE[1]))
+            return canvas
         canvas = Image.new("RGB", (SIZE[0] * len(imgs), SIZE[1]))
         for i, im in enumerate(imgs):
             canvas.paste(im, (i * SIZE[0], 0))
         return canvas
 
-    states = {v: {actor: ActorState(phase=i * 1.7) for i, actor in enumerate(ACTORS)} for v in versions}
+    states = {key: {actor: ActorState(phase=i * 1.7) for i, actor in enumerate(ACTORS)} for (key, *_r) in passes}
     if a.still is not None:
         for k in range(int(a.still * FPS) + 1):              # run the easing up to the still's time
             img = render_all(k * dt, states)
