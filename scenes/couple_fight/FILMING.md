@@ -46,7 +46,7 @@ takes, faster retakes), `--volume 100` (sets both speakers at setup), `--no-list
 - `!!! husband: no daemon`: start the Lite's daemon (step 0).
 - The wireless refuses the offsets command (old daemon): add `--offsets local` (the Mac composes the head pose).
 - The upload endpoint is missing on the wireless: the player falls back to `scp` by itself (ssh key installed).
-- Wobble late or early in the v0/v4/v5/v6 modes: `--lead-ms 300` (default 200: the head moves 200 ms before the audio;
+- Wobble late or early in the v0/v4/v5/v6 modes: `--lead-ms 300` (default 300: the head moves 300 ms before the audio;
   more = earlier, less = later; `--lead-ms 0` = no compensation). Does nothing in `--wobbler main`.
 - Both robots late by the same amount even at lead 0: `--audio-latency 0.15` (default 0.10 s, the delay between the play
   request and the first sample heard).

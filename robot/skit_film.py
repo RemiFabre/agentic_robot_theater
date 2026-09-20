@@ -120,6 +120,7 @@ class Robot:
         self.url = f"http://{self.host}:{self.port}/api"
         self.mini = None
         self.sounds = {}            # beat id -> the `file` string the daemon plays
+        self.playing = False
         self.lock = threading.Lock()
         self.queue, self.move, self.move_t0, self.blend = [], None, 0.0, False
         self.track, self.last_idx, self.sent_offset = None, None, False
@@ -166,6 +167,7 @@ class Robot:
 
     def play_sound(self, beat_id):
         self.post("/media/play_sound", json={"file": self.sounds[beat_id]})
+        self.playing = beat_id != "_silence"
 
     def stop_sound(self):
         try:
@@ -308,8 +310,8 @@ def main():
     ap.add_argument("--husband", default="localhost:8000", help="the Lite: daemon on this Mac")
     ap.add_argument("--offsets", choices=["daemon", "local"], default="daemon", help="who composes the offsets")
     ap.add_argument("--audio-latency", type=float, default=0.10, help="s between play_sound and the first sample heard")
-    ap.add_argument("--lead-ms", type=float, default=200.0, help="motion lead in ms for the offsets modes: positive = the head "
-                    "moves earlier than the audio (compensates the motor and smoothing lag). Try 300 if still late, 100 if early")
+    ap.add_argument("--lead-ms", type=float, default=300.0, help="motion lead in ms for the offsets modes: positive = the head "
+                    "moves earlier than the audio (compensates the motor and smoothing lag). Try 400 if still late, 200 if early")
     ap.add_argument("--from-beat", type=int, default=0)
     ap.add_argument("--until", default=None, help="stop before this beat id (tests)")
     ap.add_argument("--start-delay", type=float, default=0.0, help="s between ENTER and beat 0")
@@ -354,6 +356,10 @@ def main():
                     f"{'Start it: reachy-mini-daemon' if r.local else 'Is the robot on and on the Wi-Fi?'}")
                 return 1
         # 2. sounds
+        silence = os.path.join(scene_dir, "audio", "_silence.wav")
+        if not a.no_audio:
+            for r in robots.values():
+                r.prepare_sound("_silence", silence)   # played once after wake-up: the first real line never hits a cold pipeline
         for b in beats:
             if not b.get("text") or a.no_audio:
                 continue
@@ -383,6 +389,11 @@ def main():
         ths = [threading.Thread(target=wake, args=(r,)) for r in robots.values()]
         for t in ths: t.start()
         for t in ths: t.join()
+        if not a.no_audio:
+            for r in robots.values():
+                r.play_sound("_silence")                # prime the playback pipeline (0.3 s of silence)
+            time.sleep(0.8)
+            say("audio primed on both robots")
         say(f"setup done: motion={a.motion} wobbler={a.wobbler} offsets={a.offsets if use_offsets else '-'}"
             f"{f' lead {a.lead_ms:.0f} ms' if use_offsets else ''}"
             f"{' NO AUDIO' if a.no_audio else ''}, {len(beats)} beats from {a.from_beat}")
@@ -439,6 +450,7 @@ def main():
                         speaker.set_track(None)
                     if offscreen and use_daemon_wobbler:
                         speaker.mini.enable_wobbling()
+                    speaker.playing = False
             if a.motion == "full":
                 if sp in robots:
                     speaker.wait_chain(timeout=b.get("cap", EMOTION_CAP_S), started_at=bt)
@@ -461,7 +473,7 @@ def main():
                 r.cancel()
                 if r.th.is_alive():
                     r.th.join(1.0)
-                if not a.no_audio:
+                if not a.no_audio and r.playing:
                     r.stop_sound()
                 if use_daemon_wobbler:
                     r.mini.disable_wobbling()
