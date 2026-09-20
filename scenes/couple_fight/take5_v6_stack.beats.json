@@ -1,0 +1,121 @@
+[
+ {
+  "t": 1.0,
+  "id": "late",
+  "speaker": "loretta",
+  "length": 1.8,
+  "text": "[cold] You're home late. [pause] Again."
+ },
+ {
+  "t": 3.2,
+  "id": "please",
+  "speaker": "husband",
+  "length": 4.74,
+  "text": "[tired] Loretta, please. [sighs] I come from a very long day at work."
+ },
+ {
+  "t": 8.24,
+  "id": "lisa",
+  "speaker": "loretta",
+  "length": 4.0,
+  "text": "[sarcastic] Oh. [pause] A long day. [pause] With Lisa."
+ },
+ {
+  "t": 12.54,
+  "id": "coworker",
+  "speaker": "husband",
+  "length": 4.38,
+  "text": "[exasperated] Not this again! [firmly] She is just a co-worker."
+ },
+ {
+  "t": 17.12,
+  "id": "hearts",
+  "speaker": "loretta",
+  "length": 5.4,
+  "text": "[fast] Then why is she always messaging you? [shouting] And always adding those little hearts under your messages!"
+ },
+ {
+  "t": 22.72,
+  "id": "emojis",
+  "speaker": "husband",
+  "length": 3.8,
+  "text": "[shouting] Those are emojis, Loretta! Everybody sends emojis!"
+ },
+ {
+  "t": 26.82,
+  "id": "raise",
+  "speaker": "loretta",
+  "length": 4.1,
+  "text": "[mocking] And how come you work so hard, so late, [pause] and you never get a raise?"
+ },
+ {
+  "t": 31.22,
+  "id": "boss",
+  "speaker": "husband",
+  "length": 15.87,
+  "text": "[sighs] I don't know, Loretta. [pause] But here's what I hope will happen. [hopeful] My boss will finally notice everything I do. And he'll give me a raise. [sarcastic] A raise so big, that maybe your father will finally be proud of who you married."
+ },
+ {
+  "t": 47.29,
+  "id": "my_father",
+  "speaker": "loretta",
+  "length": 3.2,
+  "text": "[sharp] Don't you bring my father into this."
+ },
+ {
+  "t": 50.69,
+  "id": "father",
+  "speaker": "husband",
+  "length": 8.7,
+  "text": "[shouting] Your father never liked me! [pause] [bitter] He called me a clank. [pause] [crying] A clank, Loretta. [sniffs] At Thanksgiving."
+ },
+ {
+  "t": 59.69,
+  "id": "let_it_go",
+  "speaker": "loretta",
+  "length": 11.03,
+  "text": "[shouting] Oh my god, let it go! [fast] It was fifteen years ago. He's old school, and you and I have always looked so different. [softer] He needed time to accept you."
+ },
+ {
+  "t": 71.22,
+  "id": "kids",
+  "speaker": "husband",
+  "length": 7.2,
+  "text": "[sighs] [weary] But honestly, Loretta... [pause] sometimes I even wonder if the kids are really mine."
+ },
+ {
+  "t": 79.22,
+  "id": "what_do_you_mean",
+  "speaker": "loretta",
+  "length": 5.9,
+  "text": "[nervous] Whaaat? [pause] What do you mean? [sweetly] They look just like us."
+ },
+ {
+  "t": 85.72,
+  "id": "third_one",
+  "speaker": "husband",
+  "length": 8.5,
+  "text": "[thoughtful] Pixel, yes. Servo, yes. [pause] But honestly, the third one... [pause] Wally looks so different."
+ },
+ {
+  "t": 94.62,
+  "id": "just_like_you",
+  "speaker": "loretta",
+  "length": 4.8,
+  "text": "[fast] Not at all! [pause] [tender] Wally looks just like you."
+ },
+ {
+  "t": 100.02,
+  "id": "larry",
+  "speaker": "larry",
+  "length": 2.92,
+  "text": "[cheerful] Yeah. Don't go imagining things, buddy."
+ },
+ {
+  "t": 103.43,
+  "id": "thank_you",
+  "speaker": "husband",
+  "length": 4.02,
+  "text": "[relieved] Oh, thank you, Larry. [pause] Thank you for being such a good friend."
+ }
+]
