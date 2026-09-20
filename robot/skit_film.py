@@ -420,15 +420,22 @@ def main():
                         track = OffsetTrack(p)
                     else:
                         say(f"  !!! no offsets {p}, the line plays without wobble")
+                offscreen = sp not in robots            # Larry: the Lite lends its speaker, its head must not move
+                if offscreen and use_daemon_wobbler:
+                    speaker.mini.disable_wobbling()
                 if not a.no_audio:
                     speaker.play_sound(b["id"])
                 t_line = now() + a.audio_latency
                 if track is not None:
                     track.start(t_line); speaker.set_track(track)
-                say(f"  line {dur:.2f}s{' + ' + os.path.basename(track.path) if track else ''}")
-                isleep(dur + b.get("tail", 0.3))
-                if track is not None:
-                    speaker.set_track(None)
+                say(f"  line {dur:.2f}s{' + ' + os.path.basename(track.path) if track else ''}{' (off screen, no wobble)' if offscreen else ''}")
+                try:
+                    isleep(dur + b.get("tail", 0.3))
+                finally:
+                    if track is not None:
+                        speaker.set_track(None)
+                    if offscreen and use_daemon_wobbler:
+                        speaker.mini.enable_wobbling()
             if a.motion == "full":
                 if sp in robots:
                     speaker.wait_chain(timeout=b.get("cap", EMOTION_CAP_S), started_at=bt)
