@@ -390,10 +390,10 @@ def main():
         for t in ths: t.start()
         for t in ths: t.join()
         if not a.no_audio:
-            for r in robots.values():
-                r.play_sound("_silence")                # prime the playback pipeline (0.3 s of silence)
-            time.sleep(0.8)
-            say("audio primed on both robots")
+            for r in robots.values():                    # an audible built-in sound on each robot: primes the pipeline and proves the speaker
+                r.post("/media/play_sound", json={"file": "impatient1.wav"})
+                time.sleep(1.5)
+            say("audio check played on both robots")
         say(f"setup done: motion={a.motion} wobbler={a.wobbler} offsets={a.offsets if use_offsets else '-'}"
             f"{f' lead {a.lead_ms:.0f} ms' if use_offsets else ''}"
             f"{' NO AUDIO' if a.no_audio else ''}, {len(beats)} beats from {a.from_beat}")
