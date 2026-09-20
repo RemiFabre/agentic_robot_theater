@@ -1,5 +1,17 @@
 # STATUS (couple_fight)
 
+## 2026-09-20, later: take 5 is final, filming player ready
+
+- Final text: `script_v5.md`, staged in `scene.json`; video `take5_v6_stack.mp4` (wobbler only over wobbler + emotions).
+- **Filming**: `scenes/couple_fight/FILMING.md` is the cheat sheet. `robot/run_film.sh` runs `robot/skit_film.py`
+  on the Mac against the two real robots (Loretta = the wireless at reachy-mini.local, the husband = the Lite whose
+  daemon Rémi starts on the Mac). Setup, then ENTER starts, ESC aborts and sleeps both robots. `--motion none|wobbler|full`,
+  `--wobbler main|v0|v4|v5|v6` (main = the robot's own live wobbler; the versions = offline offsets streamed to the
+  daemon as speech offsets, composed daemon-side like the live wobbler). Larry's line plays from the Lite.
+- Tested in simulation only (two sim daemons, no audio): all four modes, abort, upload endpoint. Not yet run on the
+  real robots: the wireless daemon's version (SetSpeechOffsetsCmd, the upload endpoint) is the main unknown; the
+  player has fallbacks (`--offsets local`, scp) and FILMING.md section 2 lists them.
+
 ## 2026-09-20: take 4, Rémi's ending (kids, the WALL-E friend), new Loretta voice
 
 Read `script_v4.md` for the text and my note on the turn. Rendered and staged in `scene.json` (17 beats, about 100 s).
